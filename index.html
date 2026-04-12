@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaiflu — Interactive Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand-primary: #4f46e5;
+    --brand-primary-hover: #4338ca;
+    --brand-primary-light: #eef2ff;
+    --brand-primary-subtle: #c7d2fe;
+    --neutral-900: #1a1a2e;
+    --neutral-800: #2a2a3e;
+    --neutral-700: #374151;
+    --neutral-600: #4b5563;
+    --neutral-500: #6b7280;
+    --neutral-400: #9ca3af;
+    --neutral-300: #d1d5db;
+    --neutral-200: #e5e7eb;
+    --neutral-100: #f3f4f6;
+    --neutral-50: #f9fafb;
+    --white: #ffffff;
+    --success: #10b981;
+    --success-light: #d1fae5;
+    --success-bg: #ecfdf5;
+    --warning: #f59e0b;
+    --warning-light: #fef3c7;
+    --warning-bg: #fffbeb;
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --danger-bg: #fef2f2;
+    --process-management: #8b5cf6;
+    --process-management-light: #ede9fe;
+    --process-operational: #f59e0b;
+    --process-operational-light: #fef3c7;
+    --process-support: #3b82f6;
+    --process-support-light: #dbeafe;
+    --ai-accent: #7c3aed;
+    --ai-bg: #f5f3ff;
+    --ai-border: #ddd6fe;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', monospace;
+    --text-xs: 11px;
+    --text-sm: 13px;
+    --text-base: 14px;
+    --text-lg: 16px;
+    --text-xl: 18px;
+    --text-2xl: 22px;
+    --text-3xl: 28px;
+    --text-metric: 36px;
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+    --leading-tight: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.65;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.10);
+    --sidebar-width: 240px;
+    --header-height: 56px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--font-family);
+    background: var(--neutral-50);
+    color: var(--neutral-900);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  /* ═══════════════════ APP SHELL ═══════════════════ */
+  .app { display: flex; height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--neutral-900);
+    color: rgba(255,255,255,0.55);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+  .sidebar-logo {
+    padding: 18px 20px;
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.3px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sidebar-logo .logo-icon {
+    width: 28px; height: 28px;
+    background: var(--brand-primary);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: white;
+  }
+  .sidebar-section { padding: 16px 12px 4px; }
+  .sidebar-section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.25);
+    padding: 0 8px;
+    margin-bottom: 6px;
+    font-weight: var(--weight-semibold);
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    transition: all 0.12s;
+    margin-bottom: 1px;
+    user-select: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
+  .nav-item.active { background: rgba(255,255,255,0.12); color: white; font-weight: var(--weight-semibold); }
+  .nav-item .nav-icon {
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .nav-item.placeholder { opacity: 0.3; font-style: italic; cursor: default; }
+  .nav-item.placeholder:hover { background: transparent; color: rgba(255,255,255,0.3); }
+  .sidebar-org {
+    margin-top: auto;
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: var(--text-xs);
+    color: rgba(255,255,255,0.3);
+  }
+  .sidebar-org strong {
+    display: block;
+    color: rgba(255,255,255,0.65);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    margin-bottom: 2px;
+  }
+
+  /* Main content */
+  .main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Top header bar */
+  .top-bar {
+    height: var(--header-height);
+    background: var(--white);
+    border-bottom: 1px solid var(--neutral-200);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+  .search-bar {
+    flex: 1;
+    max-width: 480px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    background: var(--neutral-50);
+    border: 1.5px solid var(--neutral-200);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--neutral-400);
+    cursor: text;
+    transition: border-color 0.15s;
+  }
+  .search-bar:hover { border-color: var(--neutral-300); }
+  .search-bar .search-icon { font-size: 14px; color: var(--neutral-400); }
+  .search-bar .shortcut {
+    font-size: 10px;
+    color: var(--neutral-400);
+    border: 1px solid var(--neutral-200);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    margin-left: auto;
+  }
+  .top-bar-right {
+    display: flex; align-items: center; gap: 12px; margin-left: auto;
+  }
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--brand-primary-light);
+    color: var(--brand-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+  }
+
+  /* Page content */
+  .page-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 32px;
+  }
+
+  /* Screen visibility */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ═══════════════════ SHARED COMPONENTS ═══════════════════ */
+  .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; }
+  .page-title { font-size: var(--text-2xl); font-weight: var(--weight-bold); letter-spacing: -0.3px; }
+  .page-subtitle { font-size: var(--text-sm); color: var(--neutral-500); margin-top: 4px; }
+  .breadcrumb { font-size: var(--text-xs); color: var(--neutral-400); margin-bottom: 12px; }
+  .breadcrumb a { color: var(--neutral-400); text-decoration: none; cursor: pointer; }
+  .breadcrumb a:hover { color: var(--brand-primary); }
+  .breadcrumb strong { color: var(--neutral-700); font-weight: var(--weight-semibold); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    font-family: var(--font-family);
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--brand-primary); color: var(--white); border-color: var(--brand-primary); }
+  .btn-primary:hover { background: var(--brand-primary-hover); }
+  .btn-secondary { background: var(--white); color: var(--neutral-700); border-color: var(--neutral-200); }
+  .btn-secondary:hover { border-color: var(--neutral-300); background: var(--neutral-50); }
+  .btn-ghost { background: none; color: var(--brand-primary); border-color: transparent; }
+  .btn-sm { padding: var(--space-1) var(--space-3); font-size: var(--text-xs); }
+
+  .card {
+    background: var(--white);
+    border: 1.5px solid var(--neutral-200);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+  }
+  .card-title {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-3);
+    color: var(--neutral-700);
+  }
+
+  .tag {
+    display: inline-flex; align-items: center;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+  }
+  .tag-success { background: var(--success-light); color: #065f46; }
+  .tag-warning { background: var(--warning-light); color: #92400e; }
+  .tag-danger { background: var(--danger-light); color: #991b1b; }
+  .tag-neutral { background: var(--neutral-100); color: var(--neutral-600); }
+  .tag-ai { background: var(--ai-bg); color: var(--ai-accent); }
+  .tag-mgmt { background: var(--process-management-light); color: #5b21b6; }
+  .tag-ops { background: var(--process-operational-light); color: #92400e; }
+  .tag-support { background: var(--process-support-light); color: #1e40af; }
+
+  .progress { height: 8px; background: var(--neutral-100); border-radius: var(--radius-full); overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: var(--radius-full); transition: width 0.6s ease; }
+
+  .tabs { display: flex; border-bottom: 1.5px solid var(--neutral-200); gap: 0; margin-bottom: 20px; }
+  .tab {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--neutral-400);
+    border-bottom: 2px solid transparent;
+    font-weight: var(--weight-medium);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .tab:hover { color: var(--neutral-600); }
+  .tab.active { color: var(--neutral-900); border-bottom-color: var(--brand-primary); font-weight: var(--weight-semibold); }
+
+  .table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+  .table th {
+    text-align: left;
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1.5px solid var(--neutral-200);
+    color: var(--neutral-500);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .table td {
+    padding: 10px var(--space-3);
+    border-bottom: 1px solid var(--neutral-100);
+    color: var(--neutral-600);
+  }
+  .table tr { transition: background 0.1s; }
+  .table tbody tr:hover { background: var(--neutral-50); }
+
+  .metric-card { text-align: center; padding: var(--space-3); }
+  .metric-value { font-size: var(--text-metric); font-weight: var(--weight-bold); color: var(--neutral-900); line-height: 1.1; }
+  .metric-label { font-size: var(--text-xs); color: var(--neutral-500); margin-top: 4px; }
+
+  .ai-insight {
+    padding: var(--space-3) var(--space-4);
+    background: var(--ai-bg);
+    border: 1px solid var(--ai-border);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: #5b21b6;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .ai-insight .ai-icon {
+    width: 20px; height: 20px;
+    background: var(--ai-accent);
+    color: white;
+    border-radius: var(--radius-full);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Grid helpers */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .grid-sidebar { display: grid; grid-template-columns: 1.8fr 1fr; gap: 20px; }
+
+  .filter-bar {
+    display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 5px 14px;
+    border: 1.5px solid var(--neutral-200);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-family: var(--font-family);
+    font-weight: var(--weight-medium);
+    color: var(--neutral-600);
+    background: var(--white);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .filter-btn:hover { border-color: var(--neutral-300); background: var(--neutral-50); }
+  .filter-btn.active { border-color: var(--brand-primary); color: var(--brand-primary); background: var(--brand-primary-light); }
+
+  /* ═══════════════════ PROCESS MAP ═══════════════════ */
+  .process-lane {
+    background: var(--white);
+    border: 1.5px solid var(--neutral-200);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .process-lane-title {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--neutral-100);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .lane-dot {
+    width: 8px; height: 8px; border-radius: var(--radius-full);
+  }
+  .process-chip {
+    display: inline-block;
+    padding: 10px 16px;
+    margin: 4px 6px;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    border: 1.5px solid var(--neutral-200);
+    background: var(--white);
+    cursor: pointer;
+    transition: all 0.15s;
+    vertical-align: top;
+    max-width: 220px;
+  }
+  .process-chip:hover { border-color: var(--brand-primary); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+  .process-chip .chip-name { font-weight: var(--weight-semibold); margin-bottom: 4px; }
+  .process-chip .chip-meta { font-size: var(--text-xs); color: var(--neutral-500); margin-top: 4px; }
+  .process-chip.mgmt { border-left: 3px solid var(--process-management); }
+  .process-chip.ops { border-left: 3px solid var(--process-operational); }
+  .process-chip.support { border-left: 3px solid var(--process-support); }
+
+  /* ═══════════════════ PROCESS WORKSPACE ═══════════════════ */
+  .flow-container { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 12px 0; }
+  .flow-step {
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--neutral-200);
+    background: var(--white);
+    font-size: var(--text-xs);
+    text-align: center;
+    min-width: 110px;
+    font-weight: var(--weight-medium);
+    transition: all 0.15s;
+    cursor: default;
+  }
+  .flow-step.has-control { border-left: 3px solid var(--success); }
+  .flow-arrow { color: var(--neutral-300); font-size: 18px; }
+
+  .activity-card {
+    background: var(--white);
+    border: 1.5px solid var(--neutral-200);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.15s;
+  }
+  .activity-card.has-control { border-left: 3px solid var(--success); }
+  .activity-card:hover { box-shadow: var(--shadow-md); }
+  .activity-header { display: flex; justify-content: space-between; align-items: flex-start; cursor: pointer; }
+  .activity-title { font-size: var(--text-base); font-weight: var(--weight-semibold); }
+  .activity-meta { font-size: var(--text-xs); color: var(--neutral-500); margin-top: 2px; }
+  .activity-detail {
+    margin-top: 14px;
+    padding: 14px;
+    background: var(--neutral-50);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--neutral-100);
+  }
+  .control-block {
+    padding: 10px 14px;
+    background: var(--white);
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    margin-bottom: 8px;
+    line-height: var(--leading-relaxed);
+  }
+  .control-block .iso-map { color: var(--success); font-size: var(--text-xs); margin-top: 4px; }
+
+  /* ═══════════════════ RISK MATRIX ═══════════════════ */
+  .risk-matrix {
+    display: grid;
+    grid-template-columns: 24px repeat(5, 1fr);
+    grid-template-rows: repeat(5, 36px) 24px;
+    gap: 2px;
+    font-size: 10px;
+    max-width: 280px;
+  }
+  .risk-cell {
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px; font-weight: var(--weight-bold);
+    font-size: 11px;
+  }
+  .risk-green { background: var(--success-light); color: #065f46; }
+  .risk-amber { background: var(--warning-light); color: #92400e; }
+  .risk-red { background: var(--danger-light); color: #991b1b; }
+  .risk-label { font-size: 9px; color: var(--neutral-400); display: flex; align-items: center; justify-content: center; }
+
+  /* ═══════════════════ COMPLIANCE ═══════════════════ */
+  .compliance-row { transition: background 0.1s; }
+  .compliance-row:hover { background: var(--neutral-50); }
+  .mini-progress {
+    width: 80px;
+    height: 6px;
+    background: var(--neutral-100);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  .mini-progress-fill { height: 100%; border-radius: var(--radius-full); }
+
+  /* ═══════════════════ AI ASSISTANT WIDGET ═══════════════════ */
+  .ai-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-full);
+    background: var(--ai-accent);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+    z-index: 9999;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .ai-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(124, 58, 237, 0.5);
+  }
+  .ai-fab.open { transform: rotate(45deg); background: var(--neutral-600); box-shadow: var(--shadow-lg); }
+
+  .ai-chat-panel {
+    position: fixed;
+    bottom: 88px;
+    right: 24px;
+    width: 360px;
+    max-height: 500px;
+    background: var(--white);
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    z-index: 9998;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .ai-chat-panel.visible { display: flex; }
+
+  .ai-chat-header {
+    background: var(--neutral-900);
+    color: white;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ai-chat-avatar {
+    width: 32px; height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--ai-accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .ai-chat-header-text { font-size: var(--text-sm); font-weight: var(--weight-semibold); }
+  .ai-chat-header-sub { font-size: var(--text-xs); color: rgba(255,255,255,0.45); font-weight: var(--weight-regular); margin-top: 1px; }
+
+  .ai-chat-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--neutral-50);
+    max-height: 340px;
+  }
+  .ai-msg {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    max-width: 88%;
+  }
+  .ai-msg.assistant {
+    background: var(--white);
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;
+    padding: 12px 14px;
+    align-self: flex-start;
+    color: var(--neutral-700);
+  }
+  .ai-msg.user {
+    background: var(--brand-primary);
+    color: white;
+    border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
+    padding: 12px 14px;
+    align-self: flex-end;
+  }
+  .ai-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ai-chip {
+    padding: 6px 12px;
+    font-size: var(--text-xs);
+    font-family: var(--font-family);
+    border: 1.5px solid var(--ai-border);
+    border-radius: var(--radius-full);
+    background: var(--white);
+    color: var(--ai-accent);
+    cursor: pointer;
+    transition: all 0.12s;
+    font-weight: var(--weight-medium);
+  }
+  .ai-chip:hover { background: var(--ai-bg); border-color: var(--ai-accent); }
+
+  .ai-chat-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-top: 1px solid var(--neutral-200);
+    background: var(--white);
+  }
+  .ai-chat-input input {
+    flex: 1;
+    border: 1.5px solid var(--neutral-200);
+    border-radius: var(--radius-full);
+    padding: 9px 16px;
+    font-size: var(--text-sm);
+    font-family: var(--font-family);
+    color: var(--neutral-900);
+    background: var(--neutral-50);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .ai-chat-input input:focus { border-color: var(--ai-accent); }
+  .ai-chat-input input::placeholder { color: var(--neutral-400); }
+  .ai-chat-input button {
+    width: 36px; height: 36px;
+    border-radius: var(--radius-full);
+    border: none;
+    background: var(--ai-accent);
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.12s;
+  }
+  .ai-chat-input button:hover { background: #6d28d9; }
+
+  /* ═══════════════════ ANIMATIONS ═══════════════════ */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .screen.active { animation: fadeIn 0.25s ease; }
+  .card { animation: fadeIn 0.3s ease; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">K</div>
+      Kaiflu
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Main</div>
+      <div class="nav-item active" onclick="navigate('dashboard')">
+        <span class="nav-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </span> Dashboard
+      </div>
+      <div class="nav-item" onclick="navigate('processmap')">
+        <span class="nav-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m-7.07-15.07l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+        </span> Process Map
+      </div>
+      <div class="nav-item" onclick="navigate('compliance')">
+        <span class="nav-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </span> Compliance
+      </div>
+      <div class="nav-item" onclick="navigate('risks')">
+        <span class="nav-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </span> Risks & Opportunities
+      </div>
+      <div class="nav-item" onclick="navigate('tasks')">
+        <span class="nav-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </span> Tasks
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Library</div>
+      <div class="nav-item" onclick="navigate('documents')">
+        <span class="nav-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+        </span> Documents
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Settings</div>
+      <div class="nav-item" onclick="navigate('organization')">
+        <span class="nav-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </span> Organization
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Coming Soon</div>
+      <div class="nav-item placeholder">
+        <span class="nav-icon">◇</span> Audits & Reviews
+      </div>
+      <div class="nav-item placeholder">
+        <span class="nav-icon">◇</span> Non-Conformities
+      </div>
+    </div>
+    <div class="sidebar-org">
+      <strong>Acme Manufacturing</strong>
+      ISO 9001:2015
+    </div>
+  </nav>
+
+  <!-- ═══════════════════ MAIN AREA ═══════════════════ -->
+  <div class="main-area">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="search-bar">
+        <span class="search-icon">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        Search processes, documents, risks, tasks...
+        <span class="shortcut">⌘K</span>
+      </div>
+      <div class="top-bar-right">
+        <svg width="18" height="18" fill="none" stroke="var(--neutral-400)" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <div class="avatar">JG</div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="page-content">
+
+      <!-- ════════════════ DASHBOARD ════════════════ -->
+      <div class="screen active" id="screen-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Dashboard</div>
+            <div class="page-subtitle">Your compliance status at a glance</div>
+          </div>
+          <button class="btn btn-primary" onclick="navigate('processmap')">+ Add Process</button>
+        </div>
+
+        <!-- KPIs -->
+        <div class="grid-5" style="margin-bottom: 20px;">
+          <div class="card">
+            <div class="metric-card">
+              <div class="metric-value" style="color: var(--warning);">23%</div>
+              <div class="metric-label">ISO 9001 Coverage</div>
+              <div class="progress" style="margin-top: 8px;"><div class="progress-fill" style="width: 23%; background: var(--warning);"></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="metric-card">
+              <div class="metric-value" style="font-size: 28px;">3 / 12</div>
+              <div class="metric-label">Processes Documented</div>
+              <div class="progress" style="margin-top: 8px;"><div class="progress-fill" style="width: 25%; background: var(--brand-primary);"></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="metric-card">
+              <div class="metric-value">7</div>
+              <div class="metric-label">Open Risks</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="metric-card">
+              <div class="metric-value">2</div>
+              <div class="metric-label">Non-Conformities</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="metric-card">
+              <div class="metric-value">12</div>
+              <div class="metric-label">Pending Actions</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-sidebar">
+          <div>
+            <!-- Top Risks -->
+            <div class="card" style="margin-bottom: 16px;">
+              <div class="card-title">Top Risks</div>
+              <table class="table">
+                <thead><tr><th>Risk</th><th>Process</th><th>Severity</th></tr></thead>
+                <tbody>
+                  <tr style="cursor:pointer" onclick="navigate('risks')"><td>No supplier evaluation criteria</td><td>Purchasing</td><td><span class="tag tag-danger">High</span></td></tr>
+                  <tr style="cursor:pointer" onclick="navigate('risks')"><td>Single-person approval, no threshold</td><td>Purchasing</td><td><span class="tag tag-warning">Medium</span></td></tr>
+                  <tr style="cursor:pointer" onclick="navigate('risks')"><td>No training records maintained</td><td>HR & Onboarding</td><td><span class="tag tag-warning">Medium</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Next Tasks -->
+            <div class="card">
+              <div class="card-title">Next Tasks</div>
+              <table class="table">
+                <thead><tr><th>Action</th><th>Process</th><th>Owner</th><th>Due</th></tr></thead>
+                <tbody>
+                  <tr style="cursor:pointer" onclick="navigate('tasks')"><td>Define supplier evaluation criteria</td><td>Purchasing</td><td>J. García</td><td style="color: var(--danger); font-weight: 600;">Apr 8</td></tr>
+                  <tr style="cursor:pointer" onclick="navigate('tasks')"><td>Create purchase approval matrix</td><td>Purchasing</td><td>M. Chen</td><td>Apr 18</td></tr>
+                  <tr style="cursor:pointer" onclick="navigate('tasks')"><td>Document goods inspection procedure</td><td>Purchasing</td><td>J. García</td><td>Apr 22</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div>
+            <!-- Non-Conformities -->
+            <div class="card" style="margin-bottom: 16px;">
+              <div class="card-title">Non-Conformities & Complaints</div>
+              <table class="table">
+                <thead><tr><th>Issue</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Goods received without inspection</td><td><span class="tag tag-danger">Open</span></td></tr>
+                  <tr><td>Customer complaint — late delivery</td><td><span class="tag tag-warning">In progress</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- AI Insight -->
+            <div class="ai-insight" style="margin-bottom: 16px;">
+              <div class="ai-icon">✦</div>
+              <div>
+                <strong>AI insight:</strong> Documenting "Customer Complaint Handling" next would add ~15% ISO 9001 coverage.
+              </div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="navigate('processmap')">View Process Map →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ PROCESS MAP ════════════════ -->
+      <div class="screen" id="screen-processmap">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Process Map</div>
+            <div class="page-subtitle">All processes organized by type — click any process to open its workspace</div>
+          </div>
+          <button class="btn btn-primary">+ Add Process</button>
+        </div>
+
+        <!-- Management -->
+        <div class="process-lane">
+          <div class="process-lane-title">
+            <span class="lane-dot" style="background: var(--process-management);"></span>
+            Management Processes
+          </div>
+          <div class="process-chip mgmt">
+            <div class="chip-name">Strategic Planning</div>
+            <div class="chip-meta">Owner: CEO · Last: 3d ago</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Draft</span>
+          </div>
+          <div class="process-chip mgmt">
+            <div class="chip-name">Management Review</div>
+            <div class="chip-meta">Owner: CEO · Last: 5d ago</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Draft</span>
+          </div>
+          <div class="process-chip mgmt">
+            <div class="chip-name">Policy Management</div>
+            <div class="chip-meta">Owner: — · No activity</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Not started</span>
+          </div>
+        </div>
+
+        <!-- Operational -->
+        <div class="process-lane">
+          <div class="process-lane-title">
+            <span class="lane-dot" style="background: var(--process-operational);"></span>
+            Operational Processes
+          </div>
+          <div class="process-chip ops" onclick="navigate('process-overview')">
+            <div class="chip-name">Purchasing / Procurement</div>
+            <div class="chip-meta">Owner: J. García · Last: today</div>
+            <span class="tag tag-success" style="margin-top: 6px;">Documented</span>
+          </div>
+          <div class="process-chip ops">
+            <div class="chip-name">Sales & Quoting</div>
+            <div class="chip-meta">Owner: M. Chen · Last: 2d ago</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Draft</span>
+          </div>
+          <div class="process-chip ops">
+            <div class="chip-name">Production / Service Delivery</div>
+            <div class="chip-meta">Owner: — · No activity</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Not started</span>
+          </div>
+          <div class="process-chip ops">
+            <div class="chip-name">Customer Complaint Handling</div>
+            <div class="chip-meta">Owner: — · No activity</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Not started</span>
+          </div>
+        </div>
+
+        <!-- Support -->
+        <div class="process-lane">
+          <div class="process-lane-title">
+            <span class="lane-dot" style="background: var(--process-support);"></span>
+            Support Processes
+          </div>
+          <div class="process-chip support">
+            <div class="chip-name">HR & Onboarding</div>
+            <div class="chip-meta">Owner: L. Patel · Last: 1d ago</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Draft</span>
+          </div>
+          <div class="process-chip support">
+            <div class="chip-name">Document Control</div>
+            <div class="chip-meta">Owner: — · No activity</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Not started</span>
+          </div>
+          <div class="process-chip support">
+            <div class="chip-name">IT Support</div>
+            <div class="chip-meta">Owner: — · No activity</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Not started</span>
+          </div>
+          <div class="process-chip support">
+            <div class="chip-name">Facility Management</div>
+            <div class="chip-meta">Owner: — · No activity</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Not started</span>
+          </div>
+          <div class="process-chip support">
+            <div class="chip-name">Calibration & Equipment</div>
+            <div class="chip-meta">Owner: — · No activity</div>
+            <span class="tag tag-neutral" style="margin-top: 6px;">Not started</span>
+          </div>
+        </div>
+
+        <div class="ai-insight" style="margin-top: 8px;">
+          <div class="ai-icon">✦</div>
+          <div>
+            <strong>Coverage tip:</strong> Documenting "Customer Complaint Handling" next would add ~15% ISO 9001 coverage (clauses 8.7, 10.2, 10.3).
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ PROCESS WORKSPACE — OVERVIEW ════════════════ -->
+      <div class="screen" id="screen-process-overview">
+        <div class="breadcrumb"><a onclick="navigate('processmap')">Process Map</a> → <strong>Purchasing / Procurement</strong></div>
+        <div class="page-header">
+          <div>
+            <div class="page-title">Purchasing / Procurement</div>
+            <div class="page-subtitle">Operational Process · Owner: J. García · 6 activities · 5 controls identified</div>
+          </div>
+          <button class="btn btn-secondary">Edit Process</button>
+        </div>
+
+        <div class="tabs">
+          <div class="tab active" onclick="navigate('process-overview')">Overview</div>
+          <div class="tab" onclick="navigate('process-activities')">Activities</div>
+          <div class="tab" onclick="navigate('process-risks')">Risks</div>
+          <div class="tab" onclick="navigate('process-compliance')">Compliance</div>
+          <div class="tab">Documents</div>
+        </div>
+
+        <div class="grid-sidebar">
+          <div>
+            <div class="card" style="margin-bottom: 16px;">
+              <div class="card-title">Process Details</div>
+              <div style="font-size: var(--text-sm); line-height: 2; color: var(--neutral-600);">
+                <div><strong style="color: var(--neutral-900);">Type:</strong> <span class="tag tag-ops">Operational</span></div>
+                <div><strong style="color: var(--neutral-900);">Owner:</strong> J. García (Procurement Manager)</div>
+                <div><strong style="color: var(--neutral-900);">Objective:</strong> Ensure timely procurement of quality materials at optimal cost</div>
+                <div><strong style="color: var(--neutral-900);">KPI:</strong> Avg. procurement cycle time < 5 days · Supplier conformance rate > 95%</div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Activity Flow</div>
+              <div class="flow-container">
+                <div class="flow-step">Purchase<br>Request</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step has-control">Approval</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step has-control">Supplier<br>Selection</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Purchase<br>Order</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step has-control">Goods Receipt<br>& Inspection</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Invoice<br>Processing</div>
+              </div>
+              <div style="font-size: var(--text-xs); color: var(--neutral-400); margin-top: 8px;">
+                <span style="display:inline-block; width:12px; height:12px; border-left:3px solid var(--success); margin-right:4px; vertical-align:middle;"></span>
+                Green border = control point at this activity
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom: 16px;">
+              <div class="card-title">Compliance Contribution</div>
+              <div class="metric-card" style="padding: 8px;">
+                <div class="metric-value" style="font-size: 24px;">8 requirements</div>
+                <div class="metric-label">across 3 ISO 9001 clauses</div>
+              </div>
+              <div style="font-size: var(--text-sm); margin-top: 12px; color: var(--neutral-600);">
+                <div style="padding: 4px 0;">
+                  <svg width="12" height="12" fill="var(--success)" viewBox="0 0 24 24" style="vertical-align: middle;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  8.4 External Providers
+                </div>
+                <div style="padding: 4px 0;">
+                  <svg width="12" height="12" fill="var(--success)" viewBox="0 0 24 24" style="vertical-align: middle;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  8.1 Operational Planning
+                </div>
+                <div style="padding: 4px 0;">
+                  <svg width="12" height="12" fill="var(--warning)" viewBox="0 0 24 24" style="vertical-align: middle;"><circle cx="12" cy="12" r="10"/></svg>
+                  7.5 Documented Information
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Risks (3)</div>
+              <div style="font-size: var(--text-sm); color: var(--neutral-600);">
+                <div style="padding: 6px 0; border-bottom: 1px solid var(--neutral-100);">
+                  <span class="tag tag-danger">H</span> No supplier eval criteria
+                </div>
+                <div style="padding: 6px 0; border-bottom: 1px solid var(--neutral-100);">
+                  <span class="tag tag-warning">M</span> Single-person approval
+                </div>
+                <div style="padding: 6px 0;">
+                  <span class="tag tag-warning">M</span> No inspection criteria
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ PROCESS WORKSPACE — ACTIVITIES ════════════════ -->
+      <div class="screen" id="screen-process-activities">
+        <div class="breadcrumb"><a onclick="navigate('processmap')">Process Map</a> → <a onclick="navigate('process-overview')">Purchasing / Procurement</a> → <strong>Activities</strong></div>
+        <div class="page-header">
+          <div>
+            <div class="page-title">Purchasing / Procurement</div>
+            <div class="page-subtitle">Operational Process · Owner: J. García</div>
+          </div>
+          <button class="btn btn-primary">+ Add Activity</button>
+        </div>
+
+        <div class="tabs">
+          <div class="tab" onclick="navigate('process-overview')">Overview</div>
+          <div class="tab active" onclick="navigate('process-activities')">Activities</div>
+          <div class="tab" onclick="navigate('process-risks')">Risks</div>
+          <div class="tab" onclick="navigate('process-compliance')">Compliance</div>
+          <div class="tab">Documents</div>
+        </div>
+
+        <!-- Expanded: Approval -->
+        <div class="activity-card has-control">
+          <div class="activity-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            <div>
+              <div class="activity-title">2. Approval</div>
+              <div class="activity-meta">Responsible: Department Manager · Trigger: Purchase request submitted</div>
+            </div>
+            <span class="tag tag-success">1 control</span>
+          </div>
+          <div class="activity-detail">
+            <div style="font-size: var(--text-xs); font-weight: var(--weight-bold); color: var(--neutral-700); margin-bottom: 10px;">Control Point: Before purchase order is placed</div>
+            <div class="control-block">
+              <strong>Control:</strong> Authorization — Manager signs off on purchase request above €500 threshold<br>
+              <strong>Type:</strong> Manual · <strong>Evidence:</strong> Signed approval form
+              <div class="iso-map">→ Maps to ISO 9001 clause 8.1 (Operational planning and control)</div>
+            </div>
+            <div class="ai-insight" style="font-size: var(--text-xs);">
+              <div class="ai-icon" style="width:16px;height:16px;font-size:8px;">✦</div>
+              <div>AI suggestion: "Consider adding a second approval threshold for purchases above €5,000"</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expanded: Supplier Selection -->
+        <div class="activity-card has-control">
+          <div class="activity-header">
+            <div>
+              <div class="activity-title">3. Supplier Selection</div>
+              <div class="activity-meta">Responsible: Procurement Manager · Trigger: Approved purchase request</div>
+            </div>
+            <span class="tag tag-success">2 controls</span>
+          </div>
+          <div class="activity-detail">
+            <div style="font-size: var(--text-xs); font-weight: var(--weight-bold); color: var(--neutral-700); margin-bottom: 10px;">Control Point: Supplier evaluation</div>
+            <div class="control-block">
+              <strong>Control:</strong> Supplier assessment — Evaluate against quality, delivery, price criteria<br>
+              <strong>Type:</strong> Manual · <strong>Evidence:</strong> Supplier evaluation form
+              <div class="iso-map">→ Maps to ISO 9001 clause 8.4.1 (Control of external providers)</div>
+            </div>
+            <div class="control-block">
+              <strong>Control:</strong> Approved supplier list — Only purchase from vetted suppliers<br>
+              <strong>Type:</strong> Policy · <strong>Evidence:</strong> Approved supplier register
+              <div class="iso-map">→ Maps to ISO 9001 clause 8.4.2 (Type and extent of control)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collapsed activities -->
+        <div class="activity-card">
+          <div class="activity-header">
+            <div>
+              <div class="activity-title">1. Purchase Request</div>
+              <div class="activity-meta">Responsible: Any employee</div>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--neutral-400);">No controls</span>
+          </div>
+        </div>
+        <div class="activity-card">
+          <div class="activity-header">
+            <div>
+              <div class="activity-title">4. Purchase Order</div>
+              <div class="activity-meta">Responsible: Procurement Manager</div>
+            </div>
+            <span class="tag tag-success">1 control</span>
+          </div>
+        </div>
+        <div class="activity-card has-control">
+          <div class="activity-header">
+            <div>
+              <div class="activity-title">5. Goods Receipt & Inspection</div>
+              <div class="activity-meta">Responsible: Warehouse / QA</div>
+            </div>
+            <span class="tag tag-success">1 control</span>
+          </div>
+        </div>
+        <div class="activity-card">
+          <div class="activity-header">
+            <div>
+              <div class="activity-title">6. Invoice Processing & Payment</div>
+              <div class="activity-meta">Responsible: Finance</div>
+            </div>
+            <span style="font-size: var(--text-xs); color: var(--neutral-400);">No controls</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ PROCESS WORKSPACE — RISKS ════════════════ -->
+      <div class="screen" id="screen-process-risks">
+        <div class="breadcrumb"><a onclick="navigate('processmap')">Process Map</a> → <a onclick="navigate('process-overview')">Purchasing / Procurement</a> → <strong>Risks</strong></div>
+        <div class="page-header">
+          <div>
+            <div class="page-title">Purchasing / Procurement</div>
+            <div class="page-subtitle">Operational Process · Owner: J. García</div>
+          </div>
+          <button class="btn btn-primary">+ Add Risk</button>
+        </div>
+        <div class="tabs">
+          <div class="tab" onclick="navigate('process-overview')">Overview</div>
+          <div class="tab" onclick="navigate('process-activities')">Activities</div>
+          <div class="tab active" onclick="navigate('process-risks')">Risks</div>
+          <div class="tab" onclick="navigate('process-compliance')">Compliance</div>
+          <div class="tab">Documents</div>
+        </div>
+        <table class="table">
+          <thead><tr><th>Risk</th><th>Activity</th><th>L</th><th>I</th><th>Level</th><th>Treatment</th></tr></thead>
+          <tbody>
+            <tr><td><strong>No supplier evaluation criteria</strong></td><td>Supplier Selection</td><td>4</td><td>4</td><td><span class="tag tag-danger">High</span></td><td><span class="tag tag-neutral">Mitigate</span> Define eval criteria</td></tr>
+            <tr><td><strong>Single-person approval, no threshold</strong></td><td>Approval</td><td>3</td><td>3</td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Mitigate</span> Approval matrix</td></tr>
+            <tr><td><strong>No incoming inspection criteria</strong></td><td>Goods Receipt</td><td>3</td><td>3</td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Mitigate</span> Create checklist</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ════════════════ PROCESS WORKSPACE — COMPLIANCE ════════════════ -->
+      <div class="screen" id="screen-process-compliance">
+        <div class="breadcrumb"><a onclick="navigate('processmap')">Process Map</a> → <a onclick="navigate('process-overview')">Purchasing / Procurement</a> → <strong>Compliance</strong></div>
+        <div class="page-header">
+          <div>
+            <div class="page-title">Purchasing / Procurement</div>
+            <div class="page-subtitle">Operational Process · Owner: J. García</div>
+          </div>
+        </div>
+        <div class="tabs">
+          <div class="tab" onclick="navigate('process-overview')">Overview</div>
+          <div class="tab" onclick="navigate('process-activities')">Activities</div>
+          <div class="tab" onclick="navigate('process-risks')">Risks</div>
+          <div class="tab active" onclick="navigate('process-compliance')">Compliance</div>
+          <div class="tab">Documents</div>
+        </div>
+        <div class="card" style="text-align:center; padding: 24px; margin-bottom: 20px;">
+          <div style="font-size: var(--text-metric); font-weight: var(--weight-bold); color: var(--success);">8</div>
+          <div style="font-size: var(--text-sm); color: var(--neutral-500);">requirements covered across 3 ISO 9001 clauses</div>
+        </div>
+        <table class="table">
+          <thead><tr><th>Clause</th><th>Requirement</th><th>Control</th><th>Activity</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>8.4.1</td><td>Control of externally provided processes</td><td>Supplier assessment</td><td>Supplier Selection</td><td><span class="tag tag-success">Covered</span></td></tr>
+            <tr><td>8.4.2</td><td>Type and extent of control</td><td>Approved supplier list</td><td>Supplier Selection</td><td><span class="tag tag-success">Covered</span></td></tr>
+            <tr><td>8.4.3</td><td>Information for external providers</td><td>PO specification check</td><td>Purchase Order</td><td><span class="tag tag-success">Covered</span></td></tr>
+            <tr><td>8.1</td><td>Operational planning and control</td><td>Manager authorization</td><td>Approval</td><td><span class="tag tag-success">Covered</span></td></tr>
+            <tr><td>8.6</td><td>Release of products and services</td><td>Incoming inspection</td><td>Goods Receipt</td><td><span class="tag tag-success">Covered</span></td></tr>
+            <tr><td>7.5.1</td><td>Documented information — general</td><td>—</td><td>—</td><td><span class="tag tag-warning">Partial</span></td></tr>
+            <tr><td>7.1.5</td><td>Monitoring and measuring resources</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+            <tr><td>9.1.1</td><td>Performance evaluation — general</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ════════════════ COMPLIANCE (GLOBAL) ════════════════ -->
+      <div class="screen" id="screen-compliance">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Compliance — ISO 9001:2015</div>
+            <div class="page-subtitle">Clause-by-clause coverage based on your documented processes and controls</div>
+          </div>
+        </div>
+        <div class="tabs">
+          <div class="tab active">Coverage</div>
+          <div class="tab">Gap Analysis</div>
+          <div class="tab">Requirements</div>
+        </div>
+        <div class="card" style="text-align: center; padding: 24px; margin-bottom: 20px;">
+          <div style="font-size: 48px; font-weight: var(--weight-bold); color: var(--warning);">23%</div>
+          <div style="font-size: var(--text-sm); color: var(--neutral-500);">Overall ISO 9001:2015 Coverage · 14 of 62 requirements addressed</div>
+          <div class="progress" style="max-width: 400px; margin: 12px auto 0; height: 10px;">
+            <div class="progress-fill" style="width: 23%; background: var(--warning);"></div>
+          </div>
+        </div>
+        <table class="table">
+          <thead><tr><th>Clause</th><th>Section</th><th>Coverage</th><th>Requirements</th><th>Source Processes</th></tr></thead>
+          <tbody>
+            <tr class="compliance-row"><td><strong>4</strong></td><td>Context of the Organization</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:10%; background: var(--danger);"></span></span> 10%</td><td>1 / 8</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">Purchasing</td></tr>
+            <tr class="compliance-row"><td><strong>5</strong></td><td>Leadership</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:5%; background: var(--danger);"></span></span> 5%</td><td>0 / 6</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">—</td></tr>
+            <tr class="compliance-row"><td><strong>6</strong></td><td>Planning</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:15%; background: var(--danger);"></span></span> 15%</td><td>1 / 5</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">Purchasing</td></tr>
+            <tr class="compliance-row"><td><strong>7</strong></td><td>Support</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:20%; background: var(--danger);"></span></span> 20%</td><td>3 / 12</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">Purchasing, HR</td></tr>
+            <tr class="compliance-row" style="background: var(--success-bg);"><td><strong>8</strong></td><td><strong>Operation</strong></td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:45%; background: var(--success);"></span></span> <strong>45%</strong></td><td><strong>8 / 18</strong></td><td style="font-size: var(--text-xs);"><strong>Purchasing</strong>, Sales</td></tr>
+            <tr class="compliance-row"><td><strong>9</strong></td><td>Performance Evaluation</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:0%;"></span></span> 0%</td><td>0 / 7</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">—</td></tr>
+            <tr class="compliance-row"><td><strong>10</strong></td><td>Improvement</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:0%;"></span></span> 0%</td><td>0 / 6</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">—</td></tr>
+          </tbody>
+        </table>
+        <div class="card" style="margin-top: 20px;">
+          <div class="card-title">Critical Gaps</div>
+          <table class="table">
+            <thead><tr><th>Requirement</th><th>Clause</th><th>Gap</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>Management Review</td><td>9.3</td><td>No management review process documented</td><td><span class="btn btn-ghost btn-sm">View →</span></td></tr>
+              <tr><td>Internal Audit</td><td>9.2</td><td>No internal audit programme defined</td><td><span class="btn btn-ghost btn-sm">View →</span></td></tr>
+              <tr><td>Corrective Action</td><td>10.2</td><td>No formal corrective action process</td><td><span class="btn btn-ghost btn-sm">View →</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ai-insight" style="margin-top: 16px;">
+          <div class="ai-icon">✦</div>
+          <div><strong>AI insight:</strong> Documenting "Customer Complaint Handling" would cover clauses 8.7, 10.2, and 10.3 — adding approximately 15% to your overall coverage.</div>
+        </div>
+      </div>
+
+      <!-- ════════════════ RISKS & OPPORTUNITIES ════════════════ -->
+      <div class="screen" id="screen-risks">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Risks & Opportunities</div>
+            <div class="page-subtitle">Organization-wide risk register — linked to processes and activities</div>
+          </div>
+          <button class="btn btn-primary">+ Add Risk</button>
+        </div>
+        <div class="tabs">
+          <div class="tab active">Risk Register</div>
+          <div class="tab">Risk Matrix</div>
+          <div class="tab">Opportunities</div>
+        </div>
+        <table class="table">
+          <thead><tr><th>Risk</th><th>Process</th><th>Activity</th><th>L</th><th>I</th><th>Level</th><th>Treatment</th></tr></thead>
+          <tbody>
+            <tr><td><strong>No supplier evaluation criteria</strong></td><td>Purchasing</td><td>Supplier Selection</td><td>4</td><td>4</td><td><span class="tag tag-danger">High</span></td><td><span class="tag tag-neutral">Mitigate</span> Define eval criteria</td></tr>
+            <tr><td><strong>Single-person approval, no threshold</strong></td><td>Purchasing</td><td>Approval</td><td>3</td><td>3</td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Mitigate</span> Approval matrix</td></tr>
+            <tr><td><strong>Customer data not classified</strong></td><td>Sales & Quoting</td><td>Quote Preparation</td><td>2</td><td>4</td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Accept</span> Low frequency</td></tr>
+            <tr><td><strong>No backup for key equipment</strong></td><td>Production</td><td>—</td><td>2</td><td>5</td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Transfer</span> Insurance</td></tr>
+          </tbody>
+        </table>
+
+        <div class="grid-3" style="margin-top: 20px;">
+          <div class="card">
+            <div class="card-title">Risk Summary</div>
+            <div style="font-size: var(--text-sm); color: var(--neutral-600); line-height: 2.2;">
+              <div><span class="tag tag-danger">High</span> 1 risk</div>
+              <div><span class="tag tag-warning">Medium</span> 3 risks</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Risk Matrix</div>
+            <div class="risk-matrix" style="margin: 0 auto;">
+              <div class="risk-label" style="writing-mode: vertical-lr; transform: rotate(180deg); font-size: 8px;">Impact</div>
+              <div class="risk-cell risk-amber">5</div><div class="risk-cell risk-red"></div><div class="risk-cell risk-red"></div><div class="risk-cell risk-red"></div><div class="risk-cell risk-red"></div>
+              <div></div>
+              <div class="risk-cell risk-green">4</div><div class="risk-cell risk-amber">●</div><div class="risk-cell risk-amber"></div><div class="risk-cell risk-red">●</div><div class="risk-cell risk-red"></div>
+              <div></div>
+              <div class="risk-cell risk-green">3</div><div class="risk-cell risk-green"></div><div class="risk-cell risk-amber">●</div><div class="risk-cell risk-amber"></div><div class="risk-cell risk-red"></div>
+              <div></div>
+              <div class="risk-cell risk-green">2</div><div class="risk-cell risk-green"></div><div class="risk-cell risk-green"></div><div class="risk-cell risk-amber"></div><div class="risk-cell risk-amber"></div>
+              <div></div>
+              <div class="risk-cell risk-green">1</div><div class="risk-cell risk-green"></div><div class="risk-cell risk-green"></div><div class="risk-cell risk-green"></div><div class="risk-cell risk-amber"></div>
+              <div></div>
+              <div class="risk-label">1</div><div class="risk-label">2</div><div class="risk-label">3</div><div class="risk-label">4</div><div class="risk-label">5</div>
+            </div>
+            <div style="text-align:center; margin-top: 4px; font-size: 9px; color: var(--neutral-400);">Likelihood →</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Risks by Process</div>
+            <div style="font-size: var(--text-sm); color: var(--neutral-600); line-height: 2.2;">
+              <div>Purchasing — 2 risks</div>
+              <div>Sales & Quoting — 1 risk</div>
+              <div>Production — 1 risk</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ TASKS ════════════════ -->
+      <div class="screen" id="screen-tasks">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Tasks</div>
+            <div class="page-subtitle">All tasks and corrective actions across processes</div>
+          </div>
+          <button class="btn btn-primary">+ Add Task</button>
+        </div>
+        <div class="filter-bar">
+          <div class="filter-btn active">All (12)</div>
+          <div class="filter-btn" style="border-color: var(--danger); color: var(--danger);">Overdue (2)</div>
+          <div class="filter-btn">This week (5)</div>
+          <div class="filter-btn">By process ▾</div>
+          <div class="filter-btn">By owner ▾</div>
+        </div>
+        <table class="table">
+          <thead><tr><th style="width:30px;">☐</th><th>Action</th><th>Type</th><th>Source</th><th>Process</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>☐</td><td>Define supplier evaluation criteria</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">⚠ Risk</td><td>Purchasing</td><td>J. García</td><td style="color: var(--danger); font-weight: 600;">Apr 8</td><td><span class="tag tag-danger">Overdue</span></td></tr>
+            <tr><td>☐</td><td>Create purchase approval matrix</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">⚠ Risk</td><td>Purchasing</td><td>M. Chen</td><td>Apr 18</td><td><span class="tag tag-warning">In progress</span></td></tr>
+            <tr><td>☐</td><td>Document goods inspection procedure</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">◫ Compliance</td><td>Purchasing</td><td>J. García</td><td>Apr 22</td><td><span class="tag tag-neutral">Open</span></td></tr>
+            <tr><td>☐</td><td>Set up training record template</td><td><span class="tag tag-neutral">Corrective</span></td><td style="font-size: var(--text-xs);">✕ NC</td><td>HR & Onboarding</td><td>L. Patel</td><td>Apr 25</td><td><span class="tag tag-neutral">Open</span></td></tr>
+            <tr style="opacity: 0.5;"><td>☑</td><td style="text-decoration: line-through;">Draft purchasing process description</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">✎ Manual</td><td>Purchasing</td><td>J. García</td><td>Apr 1</td><td><span class="tag tag-success">Done</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ════════════════ DOCUMENTS ════════════════ -->
+      <div class="screen" id="screen-documents">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Documents</div>
+            <div class="page-subtitle">All procedures, templates, and evidence records</div>
+          </div>
+          <button class="btn btn-primary">+ Create</button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 9px 14px; background: var(--neutral-50); border: 1.5px solid var(--neutral-200); border-radius: var(--radius-md);">
+          <svg width="14" height="14" fill="none" stroke="var(--neutral-400)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span style="color: var(--neutral-400); font-size: var(--text-sm);">Search documents by name, code, process...</span>
+        </div>
+        <div class="tabs">
+          <div class="tab active">Procedures & Policies</div>
+          <div class="tab">Templates</div>
+          <div class="tab">Evidence & Records</div>
+        </div>
+        <div class="filter-bar">
+          <div class="filter-btn">All processes ▾</div>
+          <div class="filter-btn">Status ▾</div>
+        </div>
+        <table class="table">
+          <thead><tr><th>Code</th><th>Document</th><th>Process</th><th>Ver.</th><th>Owner</th><th>Status</th><th>Next Review</th></tr></thead>
+          <tbody>
+            <tr><td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-001</td><td><strong>Purchasing Procedure</strong></td><td>Purchasing</td><td>v1.2</td><td>J. García</td><td><span class="tag tag-success">Approved</span></td><td>Oct 2026</td></tr>
+            <tr><td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-003</td><td><strong>Supplier Evaluation Policy</strong></td><td>Purchasing</td><td>v0.1</td><td>J. García</td><td><span class="tag tag-warning">Draft</span></td><td>—</td></tr>
+            <tr><td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-001</td><td><strong>Quality Policy</strong></td><td>—</td><td>v1.0</td><td>CEO</td><td><span class="tag tag-success">Approved</span></td><td>Mar 2027</td></tr>
+            <tr><td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-005</td><td><strong>Employee Onboarding Procedure</strong></td><td>HR & Onboarding</td><td>v0.3</td><td>L. Patel</td><td><span class="tag tag-ai">In Review</span></td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ════════════════ ORGANIZATION (placeholder) ════════════════ -->
+      <div class="screen" id="screen-organization">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Organization</div>
+            <div class="page-subtitle">Company settings, framework configuration, and user management</div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="card" style="text-align:center; padding: 32px;">
+            <div style="font-size: 32px; margin-bottom: 12px;">🏢</div>
+            <div style="font-weight: var(--weight-semibold); margin-bottom: 4px;">Company Profile</div>
+            <div style="font-size: var(--text-sm); color: var(--neutral-500);">Name, industry, size</div>
+          </div>
+          <div class="card" style="text-align:center; padding: 32px;">
+            <div style="font-size: 32px; margin-bottom: 12px;">📋</div>
+            <div style="font-weight: var(--weight-semibold); margin-bottom: 4px;">Frameworks</div>
+            <div style="font-size: var(--text-sm); color: var(--neutral-500);">ISO 9001:2015 active</div>
+          </div>
+          <div class="card" style="text-align:center; padding: 32px;">
+            <div style="font-size: 32px; margin-bottom: 12px;">👥</div>
+            <div style="font-weight: var(--weight-semibold); margin-bottom: 4px;">Team Members</div>
+            <div style="font-size: var(--text-sm); color: var(--neutral-500);">3 users</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </div><!-- /main-area -->
+</div><!-- /app -->
+
+<!-- ═══════════════════ AI ASSISTANT WIDGET ═══════════════════ -->
+<button class="ai-fab" id="aiFab" onclick="toggleAI()" title="Kaiflu AI Assistant">✦</button>
+<div class="ai-chat-panel" id="aiPanel">
+  <div class="ai-chat-header">
+    <div class="ai-chat-avatar">✦</div>
+    <div>
+      <div class="ai-chat-header-text">Kaiflu AI</div>
+      <div class="ai-chat-header-sub">Ready to assist</div>
+    </div>
+  </div>
+  <div class="ai-chat-body" id="aiBody">
+    <div class="ai-msg assistant">
+      Hi! I'm your compliance assistant. I can help you automate tasks, identify gaps, and suggest improvements across your processes.
+    </div>
+    <div class="ai-suggestions" id="aiSuggestions">
+      <span class="ai-chip" onclick="sendAI(this.innerText)">Analyze compliance gaps</span>
+      <span class="ai-chip" onclick="sendAI(this.innerText)">Draft risk treatment plan</span>
+      <span class="ai-chip" onclick="sendAI(this.innerText)">Suggest missing controls</span>
+      <span class="ai-chip" onclick="sendAI(this.innerText)">Generate audit checklist</span>
+      <span class="ai-chip" onclick="sendAI(this.innerText)">Map process to ISO 9001</span>
+    </div>
+  </div>
+  <div class="ai-chat-input">
+    <input type="text" id="aiInput" placeholder="Ask Kaiflu AI anything..." onkeydown="if(event.key==='Enter')sendAI(this.value)">
+    <button onclick="sendAI(document.getElementById('aiInput').value)">→</button>
+  </div>
+</div>
+
+<script>
+  // ═══════════════════ NAVIGATION ═══════════════════
+  const navMap = {
+    'dashboard': 'Dashboard',
+    'processmap': 'Process Map',
+    'compliance': 'Compliance',
+    'risks': 'Risks & Opportunities',
+    'tasks': 'Tasks',
+    'documents': 'Documents',
+    'organization': 'Organization',
+    'process-overview': 'Process Map',
+    'process-activities': 'Process Map',
+    'process-risks': 'Process Map',
+    'process-compliance': 'Process Map'
+  };
+
+  function navigate(screenId) {
+    // Hide all screens
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+    // Show target
+    const target = document.getElementById('screen-' + screenId);
+    if (target) target.classList.add('active');
+
+    // Update sidebar active state
+    const sidebarTarget = navMap[screenId] || '';
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.remove('active');
+      if (item.textContent.trim() === sidebarTarget) {
+        item.classList.add('active');
+      }
+    });
+
+    // Scroll to top
+    document.querySelector('.page-content').scrollTop = 0;
+  }
+
+  // ═══════════════════ AI ASSISTANT ═══════════════════
+  function toggleAI() {
+    const panel = document.getElementById('aiPanel');
+    const fab = document.getElementById('aiFab');
+    panel.classList.toggle('visible');
+    fab.classList.toggle('open');
+  }
+
+  function sendAI(text) {
+    if (!text || !text.trim()) return;
+    const body = document.getElementById('aiBody');
+    const input = document.getElementById('aiInput');
+    const suggestions = document.getElementById('aiSuggestions');
+    if (suggestions) suggestions.remove();
+
+    // User message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'ai-msg user';
+    userMsg.textContent = text.trim();
+    body.appendChild(userMsg);
+    input.value = '';
+
+    // AI response
+    setTimeout(() => {
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'ai-msg assistant';
+      const responses = {
+        'Analyze compliance gaps': 'I found 3 gaps in your Purchasing process: Clause 8.4.1 (External Provider Control) is missing documented criteria, Clause 7.1.5 (Monitoring Resources) has no assigned controls, and Clause 9.1.1 (Performance Evaluation) needs KPIs. Want me to draft controls for these?',
+        'Draft risk treatment plan': 'Based on your 2 high-severity risks, I recommend: (1) Supplier Dependency — Mitigate by qualifying 2 alternate suppliers before Q3. (2) Delivery SLA Breach — Transfer via contractual penalties. Shall I create tasks for these?',
+        'Suggest missing controls': 'For Purchasing, I suggest: (1) Incoming inspection checklist for Clause 8.6, (2) Supplier scorecard review for Clause 8.4.2, (3) PO approval threshold for Clause 8.4.3. Add these to your control register?',
+        'Generate audit checklist': 'I can generate a pre-audit checklist covering all 12 mapped clauses for Purchasing. It will include evidence requirements, responsible owners, and status. Create as a document or add to Tasks?',
+        'Map process to ISO 9001': 'Purchasing currently maps to 8 of 14 applicable clauses (57% coverage). Unmapped: 7.1.5, 7.2, 8.4.1, 8.4.3, 9.1.1, and 10.2. Want me to suggest controls for each gap?'
+      };
+      aiMsg.textContent = responses[text.trim()] || 'I\'m analyzing your request based on your current process data and compliance status. Let me review the relevant controls and requirements — I\'ll have a recommendation shortly.';
+      body.appendChild(aiMsg);
+      body.scrollTop = body.scrollHeight;
+    }, 500);
+    body.scrollTop = body.scrollHeight;
+  }
+</script>
+
+</body>
+</html>
