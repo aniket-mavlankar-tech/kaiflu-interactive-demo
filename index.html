@@ -644,6 +644,71 @@
   }
   .ai-chat-input button:hover { background: #6d28d9; }
 
+  /* ═══════════════════ EXPANDABLE COMPLIANCE ═══════════════════ */
+  .clause-section { border: 1.5px solid var(--neutral-200); border-radius: var(--radius-lg); margin-bottom: 8px; overflow: hidden; background: var(--white); box-shadow: var(--shadow-sm); }
+  .clause-header {
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+    cursor: pointer; transition: background 0.12s; user-select: none;
+  }
+  .clause-header:hover { background: var(--neutral-50); }
+  .clause-header .chevron { transition: transform 0.2s; color: var(--neutral-400); font-size: 12px; flex-shrink: 0; }
+  .clause-section.expanded .clause-header .chevron { transform: rotate(90deg); }
+  .clause-header .clause-num { font-weight: var(--weight-bold); font-size: var(--text-lg); min-width: 28px; }
+  .clause-header .clause-name { flex: 1; font-weight: var(--weight-medium); }
+  .clause-header .clause-stats { display: flex; align-items: center; gap: 16px; font-size: var(--text-sm); color: var(--neutral-500); }
+  .clause-detail { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+  .clause-section.expanded .clause-detail { max-height: 600px; }
+  .clause-detail-inner { padding: 0 18px 16px; border-top: 1px solid var(--neutral-100); }
+
+  /* ═══════════════════ DOCUMENT DETAIL ═══════════════════ */
+  .doc-header {
+    background: var(--white); border: 1.5px solid var(--neutral-200); border-radius: var(--radius-lg);
+    padding: 20px 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm);
+  }
+  .doc-title { font-size: var(--text-2xl); font-weight: var(--weight-bold); margin-bottom: 8px; }
+  .doc-meta-row {
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    font-size: var(--text-sm); color: var(--neutral-500); margin-bottom: 12px;
+  }
+  .doc-meta-row .meta-item { display: flex; align-items: center; gap: 4px; }
+  .doc-meta-row .meta-label { font-weight: var(--weight-semibold); color: var(--neutral-700); }
+  .doc-actions { display: flex; align-items: center; gap: 8px; }
+  .version-select {
+    padding: 5px 10px; border: 1.5px solid var(--neutral-200); border-radius: var(--radius-md);
+    font-size: var(--text-sm); font-family: var(--font-family); color: var(--neutral-700);
+    background: var(--white); cursor: pointer; outline: none;
+  }
+  .version-select:focus { border-color: var(--brand-primary); }
+  .doc-body {
+    max-width: 800px; margin: 0 auto;
+    font-size: 15px; line-height: 1.75; color: var(--neutral-700);
+  }
+  .doc-body h1 { font-size: 24px; font-weight: var(--weight-bold); color: var(--neutral-900); margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--neutral-200); }
+  .doc-body h2 { font-size: 18px; font-weight: var(--weight-bold); color: var(--neutral-900); margin: 28px 0 10px; }
+  .doc-body h3 { font-size: 15px; font-weight: var(--weight-semibold); color: var(--neutral-700); margin: 20px 0 6px; }
+  .doc-body p { margin-bottom: 12px; }
+  .doc-body .doc-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); margin: 12px 0 20px; }
+  .doc-body .doc-table th { text-align: left; padding: 8px 12px; background: var(--neutral-50); border: 1px solid var(--neutral-200); font-weight: var(--weight-semibold); font-size: var(--text-xs); text-transform: uppercase; }
+  .doc-body .doc-table td { padding: 8px 12px; border: 1px solid var(--neutral-200); color: var(--neutral-600); }
+  .doc-body .meta-block {
+    background: var(--neutral-50); border: 1px solid var(--neutral-200); border-radius: var(--radius-md);
+    padding: 14px 18px; font-size: var(--text-sm); color: var(--neutral-600); margin-bottom: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  }
+
+  /* ═══════════════════ RISK REDESIGN ═══════════════════ */
+  .risk-sub { display: none; }
+  .risk-sub.active { display: block; }
+  .risk-summary-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .risk-summary-card { text-align: center; padding: 16px; }
+  .risk-summary-card .rs-value { font-size: var(--text-3xl); font-weight: var(--weight-bold); line-height: 1.1; }
+  .risk-summary-card .rs-label { font-size: var(--text-xs); color: var(--neutral-500); margin-top: 4px; }
+  .matrix-large {
+    display: grid; grid-template-columns: 32px repeat(5, 1fr); gap: 3px;
+    font-size: var(--text-sm); max-width: 460px; margin: 0 auto;
+  }
+  .matrix-large .risk-cell { height: 72px; font-weight: var(--weight-bold); border-radius: var(--radius-sm); font-size: var(--text-sm); }
+  .grid-sidebar-wide { display: grid; grid-template-columns: 1fr 280px; gap: 24px; }
+
   /* ═══════════════════ ANIMATIONS ═══════════════════ */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
@@ -956,7 +1021,7 @@
           <div class="tab" onclick="navigate('process-activities')">Activities</div>
           <div class="tab" onclick="navigate('process-risks')">Risks</div>
           <div class="tab" onclick="navigate('process-compliance')">Compliance</div>
-          <div class="tab">Documents</div>
+          <div class="tab" onclick="navigate('process-documents')">Documents</div>
         </div>
 
         <div class="grid-sidebar">
@@ -1047,7 +1112,7 @@
           <div class="tab active" onclick="navigate('process-activities')">Activities</div>
           <div class="tab" onclick="navigate('process-risks')">Risks</div>
           <div class="tab" onclick="navigate('process-compliance')">Compliance</div>
-          <div class="tab">Documents</div>
+          <div class="tab" onclick="navigate('process-documents')">Documents</div>
         </div>
 
         <!-- Expanded: Approval -->
@@ -1151,7 +1216,7 @@
           <div class="tab" onclick="navigate('process-activities')">Activities</div>
           <div class="tab active" onclick="navigate('process-risks')">Risks</div>
           <div class="tab" onclick="navigate('process-compliance')">Compliance</div>
-          <div class="tab">Documents</div>
+          <div class="tab" onclick="navigate('process-documents')">Documents</div>
         </div>
         <table class="table">
           <thead><tr><th>Risk</th><th>Activity</th><th>L</th><th>I</th><th>Level</th><th>Treatment</th></tr></thead>
@@ -1177,7 +1242,7 @@
           <div class="tab" onclick="navigate('process-activities')">Activities</div>
           <div class="tab" onclick="navigate('process-risks')">Risks</div>
           <div class="tab active" onclick="navigate('process-compliance')">Compliance</div>
-          <div class="tab">Documents</div>
+          <div class="tab" onclick="navigate('process-documents')">Documents</div>
         </div>
         <div class="card" style="text-align:center; padding: 24px; margin-bottom: 20px;">
           <div style="font-size: var(--text-metric); font-weight: var(--weight-bold); color: var(--success);">8</div>
@@ -1198,7 +1263,45 @@
         </table>
       </div>
 
-      <!-- ════════════════ COMPLIANCE (GLOBAL) ════════════════ -->
+      <!-- ════════════════ PROCESS WORKSPACE — DOCUMENTS ════════════════ -->
+      <div class="screen" id="screen-process-documents">
+        <div class="breadcrumb"><a onclick="navigate('processmap')">Process Map</a> → <a onclick="navigate('process-overview')">Purchasing / Procurement</a> → <strong>Documents</strong></div>
+        <div class="page-header">
+          <div>
+            <div class="page-title">Purchasing / Procurement</div>
+            <div class="page-subtitle">Operational Process · Owner: J. García</div>
+          </div>
+          <button class="btn btn-primary">+ Create Document</button>
+        </div>
+        <div class="tabs">
+          <div class="tab" onclick="navigate('process-overview')">Overview</div>
+          <div class="tab" onclick="navigate('process-activities')">Activities</div>
+          <div class="tab" onclick="navigate('process-risks')">Risks</div>
+          <div class="tab" onclick="navigate('process-compliance')">Compliance</div>
+          <div class="tab active" onclick="navigate('process-documents')">Documents</div>
+        </div>
+        <table class="table">
+          <thead><tr><th>Code</th><th>Document</th><th>Ver.</th><th>Owner</th><th>Status</th><th>Next Review</th></tr></thead>
+          <tbody>
+            <tr style="cursor:pointer;" onclick="navigate('doc-detail-pro001')">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-001</td>
+              <td><strong>Purchasing Procedure</strong></td>
+              <td>v1.2</td><td>J. García</td>
+              <td><span class="tag tag-success">Approved</span></td>
+              <td>Oct 2026</td>
+            </tr>
+            <tr style="cursor:pointer;">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-003</td>
+              <td><strong>Supplier Evaluation Policy</strong></td>
+              <td>v0.1</td><td>J. García</td>
+              <td><span class="tag tag-warning">Draft</span></td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ════════════════ COMPLIANCE (GLOBAL) — EXPANDABLE ════════════════ -->
       <div class="screen" id="screen-compliance">
         <div class="page-header">
           <div>
@@ -1211,25 +1314,190 @@
           <div class="tab">Gap Analysis</div>
           <div class="tab">Requirements</div>
         </div>
-        <div class="card" style="text-align: center; padding: 24px; margin-bottom: 20px;">
+        <div class="card" style="text-align: center; padding: 24px; margin-bottom: 24px;">
           <div style="font-size: 48px; font-weight: var(--weight-bold); color: var(--warning);">23%</div>
           <div style="font-size: var(--text-sm); color: var(--neutral-500);">Overall ISO 9001:2015 Coverage · 14 of 62 requirements addressed</div>
           <div class="progress" style="max-width: 400px; margin: 12px auto 0; height: 10px;">
             <div class="progress-fill" style="width: 23%; background: var(--warning);"></div>
           </div>
         </div>
-        <table class="table">
-          <thead><tr><th>Clause</th><th>Section</th><th>Coverage</th><th>Requirements</th><th>Source Processes</th></tr></thead>
-          <tbody>
-            <tr class="compliance-row"><td><strong>4</strong></td><td>Context of the Organization</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:10%; background: var(--danger);"></span></span> 10%</td><td>1 / 8</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">Purchasing</td></tr>
-            <tr class="compliance-row"><td><strong>5</strong></td><td>Leadership</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:5%; background: var(--danger);"></span></span> 5%</td><td>0 / 6</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">—</td></tr>
-            <tr class="compliance-row"><td><strong>6</strong></td><td>Planning</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:15%; background: var(--danger);"></span></span> 15%</td><td>1 / 5</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">Purchasing</td></tr>
-            <tr class="compliance-row"><td><strong>7</strong></td><td>Support</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:20%; background: var(--danger);"></span></span> 20%</td><td>3 / 12</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">Purchasing, HR</td></tr>
-            <tr class="compliance-row" style="background: var(--success-bg);"><td><strong>8</strong></td><td><strong>Operation</strong></td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:45%; background: var(--success);"></span></span> <strong>45%</strong></td><td><strong>8 / 18</strong></td><td style="font-size: var(--text-xs);"><strong>Purchasing</strong>, Sales</td></tr>
-            <tr class="compliance-row"><td><strong>9</strong></td><td>Performance Evaluation</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:0%;"></span></span> 0%</td><td>0 / 7</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">—</td></tr>
-            <tr class="compliance-row"><td><strong>10</strong></td><td>Improvement</td><td><span class="mini-progress"><span class="mini-progress-fill" style="width:0%;"></span></span> 0%</td><td>0 / 6</td><td style="font-size: var(--text-xs); color: var(--neutral-400);">—</td></tr>
-          </tbody>
-        </table>
+
+        <!-- Clause 4 -->
+        <div class="clause-section">
+          <div class="clause-header" onclick="toggleClause(this)">
+            <span class="chevron">▸</span>
+            <span class="clause-num">4</span>
+            <span class="clause-name">Context of the Organization</span>
+            <div class="clause-stats">
+              <span><span class="mini-progress"><span class="mini-progress-fill" style="width:10%; background: var(--danger);"></span></span> 10%</span>
+              <span>1 / 8</span>
+              <span style="font-size: var(--text-xs); color: var(--neutral-400);">Purchasing</span>
+            </div>
+          </div>
+          <div class="clause-detail"><div class="clause-detail-inner">
+            <table class="table" style="margin-top:12px;">
+              <thead><tr><th>Sub-clause</th><th>Requirement</th><th>Control</th><th>Source</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>4.1</td><td>Understanding the organization and its context</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>4.2</td><td>Understanding needs of interested parties</td><td>Stakeholder analysis</td><td>Purchasing</td><td><span class="tag tag-warning">Partial</span></td></tr>
+                <tr><td>4.3</td><td>Determining the scope of the QMS</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>4.4</td><td>QMS and its processes</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+              </tbody>
+            </table>
+          </div></div>
+        </div>
+
+        <!-- Clause 5 -->
+        <div class="clause-section">
+          <div class="clause-header" onclick="toggleClause(this)">
+            <span class="chevron">▸</span>
+            <span class="clause-num">5</span>
+            <span class="clause-name">Leadership</span>
+            <div class="clause-stats">
+              <span><span class="mini-progress"><span class="mini-progress-fill" style="width:5%; background: var(--danger);"></span></span> 5%</span>
+              <span>0 / 6</span>
+              <span style="font-size: var(--text-xs); color: var(--neutral-400);">—</span>
+            </div>
+          </div>
+          <div class="clause-detail"><div class="clause-detail-inner">
+            <table class="table" style="margin-top:12px;">
+              <thead><tr><th>Sub-clause</th><th>Requirement</th><th>Control</th><th>Source</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>5.1</td><td>Leadership and commitment</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>5.2</td><td>Quality policy</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>5.3</td><td>Organizational roles, responsibilities</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+              </tbody>
+            </table>
+          </div></div>
+        </div>
+
+        <!-- Clause 6 -->
+        <div class="clause-section">
+          <div class="clause-header" onclick="toggleClause(this)">
+            <span class="chevron">▸</span>
+            <span class="clause-num">6</span>
+            <span class="clause-name">Planning</span>
+            <div class="clause-stats">
+              <span><span class="mini-progress"><span class="mini-progress-fill" style="width:15%; background: var(--danger);"></span></span> 15%</span>
+              <span>1 / 5</span>
+              <span style="font-size: var(--text-xs); color: var(--neutral-400);">Purchasing</span>
+            </div>
+          </div>
+          <div class="clause-detail"><div class="clause-detail-inner">
+            <table class="table" style="margin-top:12px;">
+              <thead><tr><th>Sub-clause</th><th>Requirement</th><th>Control</th><th>Source</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>6.1</td><td>Actions to address risks and opportunities</td><td>Risk register</td><td>Purchasing</td><td><span class="tag tag-warning">Partial</span></td></tr>
+                <tr><td>6.2</td><td>Quality objectives and planning</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>6.3</td><td>Planning of changes</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+              </tbody>
+            </table>
+          </div></div>
+        </div>
+
+        <!-- Clause 7 -->
+        <div class="clause-section">
+          <div class="clause-header" onclick="toggleClause(this)">
+            <span class="chevron">▸</span>
+            <span class="clause-num">7</span>
+            <span class="clause-name">Support</span>
+            <div class="clause-stats">
+              <span><span class="mini-progress"><span class="mini-progress-fill" style="width:20%; background: var(--danger);"></span></span> 20%</span>
+              <span>3 / 12</span>
+              <span style="font-size: var(--text-xs); color: var(--neutral-400);">Purchasing, HR</span>
+            </div>
+          </div>
+          <div class="clause-detail"><div class="clause-detail-inner">
+            <table class="table" style="margin-top:12px;">
+              <thead><tr><th>Sub-clause</th><th>Requirement</th><th>Control</th><th>Source</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>7.1.1</td><td>General resources</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>7.1.5</td><td>Monitoring and measuring resources</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>7.2</td><td>Competence</td><td>Training records</td><td>HR</td><td><span class="tag tag-warning">Partial</span></td></tr>
+                <tr><td>7.5.1</td><td>Documented information — general</td><td>Document control</td><td>Purchasing</td><td><span class="tag tag-warning">Partial</span></td></tr>
+                <tr><td>7.5.2</td><td>Creating and updating documented info</td><td>Version control</td><td>Purchasing</td><td><span class="tag tag-success">Covered</span></td></tr>
+                <tr><td>7.5.3</td><td>Control of documented information</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+              </tbody>
+            </table>
+          </div></div>
+        </div>
+
+        <!-- Clause 8 — EXPANDED BY DEFAULT -->
+        <div class="clause-section expanded">
+          <div class="clause-header" onclick="toggleClause(this)" style="background: var(--success-bg);">
+            <span class="chevron">▸</span>
+            <span class="clause-num">8</span>
+            <span class="clause-name" style="font-weight: var(--weight-bold);">Operation</span>
+            <div class="clause-stats">
+              <span><span class="mini-progress"><span class="mini-progress-fill" style="width:45%; background: var(--success);"></span></span> <strong>45%</strong></span>
+              <span><strong>8 / 18</strong></span>
+              <span style="font-size: var(--text-xs);"><strong>Purchasing</strong>, Sales</span>
+            </div>
+          </div>
+          <div class="clause-detail"><div class="clause-detail-inner">
+            <table class="table" style="margin-top:12px;">
+              <thead><tr><th>Sub-clause</th><th>Requirement</th><th>Control</th><th>Source</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>8.1</td><td>Operational planning and control</td><td>Manager authorization</td><td>Purchasing</td><td><span class="tag tag-success">Covered</span></td></tr>
+                <tr><td>8.4.1</td><td>Control of externally provided processes</td><td>Supplier assessment</td><td>Purchasing</td><td><span class="tag tag-success">Covered</span></td></tr>
+                <tr><td>8.4.2</td><td>Type and extent of control</td><td>Approved supplier list</td><td>Purchasing</td><td><span class="tag tag-success">Covered</span></td></tr>
+                <tr><td>8.4.3</td><td>Information for external providers</td><td>PO specification check</td><td>Purchasing</td><td><span class="tag tag-success">Covered</span></td></tr>
+                <tr><td>8.5.1</td><td>Control of production/service provision</td><td>Order tracking</td><td>Sales</td><td><span class="tag tag-warning">Partial</span></td></tr>
+                <tr><td>8.6</td><td>Release of products and services</td><td>Incoming inspection</td><td>Purchasing</td><td><span class="tag tag-success">Covered</span></td></tr>
+                <tr><td>8.7</td><td>Control of nonconforming outputs</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+              </tbody>
+            </table>
+          </div></div>
+        </div>
+
+        <!-- Clause 9 -->
+        <div class="clause-section">
+          <div class="clause-header" onclick="toggleClause(this)">
+            <span class="chevron">▸</span>
+            <span class="clause-num">9</span>
+            <span class="clause-name">Performance Evaluation</span>
+            <div class="clause-stats">
+              <span><span class="mini-progress"><span class="mini-progress-fill" style="width:0%;"></span></span> 0%</span>
+              <span>0 / 7</span>
+              <span style="font-size: var(--text-xs); color: var(--neutral-400);">—</span>
+            </div>
+          </div>
+          <div class="clause-detail"><div class="clause-detail-inner">
+            <table class="table" style="margin-top:12px;">
+              <thead><tr><th>Sub-clause</th><th>Requirement</th><th>Control</th><th>Source</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>9.1.1</td><td>Monitoring, measurement, analysis — general</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>9.2</td><td>Internal audit</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>9.3</td><td>Management review</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+              </tbody>
+            </table>
+          </div></div>
+        </div>
+
+        <!-- Clause 10 -->
+        <div class="clause-section">
+          <div class="clause-header" onclick="toggleClause(this)">
+            <span class="chevron">▸</span>
+            <span class="clause-num">10</span>
+            <span class="clause-name">Improvement</span>
+            <div class="clause-stats">
+              <span><span class="mini-progress"><span class="mini-progress-fill" style="width:0%;"></span></span> 0%</span>
+              <span>0 / 6</span>
+              <span style="font-size: var(--text-xs); color: var(--neutral-400);">—</span>
+            </div>
+          </div>
+          <div class="clause-detail"><div class="clause-detail-inner">
+            <table class="table" style="margin-top:12px;">
+              <thead><tr><th>Sub-clause</th><th>Requirement</th><th>Control</th><th>Source</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>10.1</td><td>General improvement</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>10.2</td><td>Nonconformity and corrective action</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+                <tr><td>10.3</td><td>Continual improvement</td><td>—</td><td>—</td><td><span class="tag tag-danger">Gap</span></td></tr>
+              </tbody>
+            </table>
+          </div></div>
+        </div>
+
         <div class="card" style="margin-top: 20px;">
           <div class="card-title">Critical Gaps</div>
           <table class="table">
@@ -1247,7 +1515,7 @@
         </div>
       </div>
 
-      <!-- ════════════════ RISKS & OPPORTUNITIES ════════════════ -->
+      <!-- ════════════════ RISKS & OPPORTUNITIES — REDESIGNED ════════════════ -->
       <div class="screen" id="screen-risks">
         <div class="page-header">
           <div>
@@ -1256,54 +1524,112 @@
           </div>
           <button class="btn btn-primary">+ Add Risk</button>
         </div>
-        <div class="tabs">
-          <div class="tab active">Risk Register</div>
-          <div class="tab">Risk Matrix</div>
-          <div class="tab">Opportunities</div>
+        <div class="tabs" id="riskTabs">
+          <div class="tab active" onclick="switchRiskTab('register')">Risk Register</div>
+          <div class="tab" onclick="switchRiskTab('matrix')">Risk Matrix</div>
+          <div class="tab" onclick="switchRiskTab('opportunities')">Opportunities</div>
         </div>
-        <table class="table">
-          <thead><tr><th>Risk</th><th>Process</th><th>Activity</th><th>L</th><th>I</th><th>Level</th><th>Treatment</th></tr></thead>
-          <tbody>
-            <tr><td><strong>No supplier evaluation criteria</strong></td><td>Purchasing</td><td>Supplier Selection</td><td>4</td><td>4</td><td><span class="tag tag-danger">High</span></td><td><span class="tag tag-neutral">Mitigate</span> Define eval criteria</td></tr>
-            <tr><td><strong>Single-person approval, no threshold</strong></td><td>Purchasing</td><td>Approval</td><td>3</td><td>3</td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Mitigate</span> Approval matrix</td></tr>
-            <tr><td><strong>Customer data not classified</strong></td><td>Sales & Quoting</td><td>Quote Preparation</td><td>2</td><td>4</td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Accept</span> Low frequency</td></tr>
-            <tr><td><strong>No backup for key equipment</strong></td><td>Production</td><td>—</td><td>2</td><td>5</td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Transfer</span> Insurance</td></tr>
-          </tbody>
-        </table>
 
-        <div class="grid-3" style="margin-top: 20px;">
-          <div class="card">
-            <div class="card-title">Risk Summary</div>
-            <div style="font-size: var(--text-sm); color: var(--neutral-600); line-height: 2.2;">
-              <div><span class="tag tag-danger">High</span> 1 risk</div>
-              <div><span class="tag tag-warning">Medium</span> 3 risks</div>
+        <!-- ──── RISK REGISTER TAB ──── -->
+        <div class="risk-sub active" id="risks-register">
+          <div class="risk-summary-cards">
+            <div class="card risk-summary-card"><div class="rs-value">7</div><div class="rs-label">Total Risks</div></div>
+            <div class="card risk-summary-card"><div class="rs-value" style="color: var(--danger);">1</div><div class="rs-label">High</div></div>
+            <div class="card risk-summary-card"><div class="rs-value" style="color: var(--warning);">4</div><div class="rs-label">Medium</div></div>
+            <div class="card risk-summary-card"><div class="rs-value" style="color: var(--success);">2</div><div class="rs-label">Low</div></div>
+          </div>
+          <div class="filter-bar">
+            <div class="filter-btn active">All</div>
+            <div class="filter-btn">By Process ▾</div>
+            <div class="filter-btn">By Level ▾</div>
+            <div class="filter-btn">By Treatment ▾</div>
+          </div>
+          <table class="table">
+            <thead><tr><th>ID</th><th>Risk</th><th>Process</th><th>Activity</th><th>L</th><th>I</th><th>Score</th><th>Level</th><th>Treatment</th><th>Owner</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-001</td><td><strong>No supplier evaluation criteria</strong></td><td>Purchasing</td><td>Supplier Selection</td><td>4</td><td>4</td><td><strong>16</strong></td><td><span class="tag tag-danger">High</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>J. García</td><td><span class="tag tag-neutral">Open</span></td></tr>
+              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-002</td><td><strong>Single-person approval, no threshold</strong></td><td>Purchasing</td><td>Approval</td><td>3</td><td>3</td><td><strong>9</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>M. Chen</td><td><span class="tag tag-warning">In progress</span></td></tr>
+              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-003</td><td><strong>Customer data not classified</strong></td><td>Sales & Quoting</td><td>Quote Preparation</td><td>2</td><td>4</td><td><strong>8</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Accept</span></td><td>M. Chen</td><td><span class="tag tag-neutral">Open</span></td></tr>
+              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-004</td><td><strong>No backup for key equipment</strong></td><td>Production</td><td>—</td><td>2</td><td>5</td><td><strong>10</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Transfer</span></td><td>L. Patel</td><td><span class="tag tag-neutral">Open</span></td></tr>
+              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-005</td><td><strong>No training records</strong></td><td>HR & Onboarding</td><td>Onboarding</td><td>3</td><td>3</td><td><strong>9</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>L. Patel</td><td><span class="tag tag-neutral">Open</span></td></tr>
+              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-006</td><td><strong>Outdated calibration records</strong></td><td>Calibration</td><td>Inspection</td><td>2</td><td>2</td><td><strong>4</strong></td><td><span class="tag tag-success">Low</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>J. García</td><td><span class="tag tag-neutral">Open</span></td></tr>
+              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-007</td><td><strong>Informal document version control</strong></td><td>Document Control</td><td>—</td><td>1</td><td>3</td><td><strong>3</strong></td><td><span class="tag tag-success">Low</span></td><td><span class="tag tag-neutral">Accept</span></td><td>J. García</td><td><span class="tag tag-success">Accepted</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ──── RISK MATRIX TAB ──── -->
+        <div class="risk-sub" id="risks-matrix">
+          <div class="grid-sidebar-wide">
+            <div>
+              <div class="card" style="padding: 28px;">
+                <div class="card-title" style="text-align:center; margin-bottom: 16px;">Risk Heat Map — Likelihood vs. Impact</div>
+                <div class="matrix-large">
+                  <div class="risk-label" style="writing-mode: vertical-lr; transform: rotate(180deg); font-size: 10px; font-weight: 600;">Impact</div>
+                  <div class="risk-cell risk-amber">5</div><div class="risk-cell risk-red"></div><div class="risk-cell risk-red"></div><div class="risk-cell risk-red"></div><div class="risk-cell risk-red"></div>
+                  <div></div>
+                  <div class="risk-cell risk-green">4</div><div class="risk-cell risk-amber" style="font-size:var(--text-xs);">R-003</div><div class="risk-cell risk-amber"></div><div class="risk-cell risk-red" style="font-size:var(--text-xs);">R-001</div><div class="risk-cell risk-red"></div>
+                  <div></div>
+                  <div class="risk-cell risk-green">3</div><div class="risk-cell risk-green"></div><div class="risk-cell risk-amber" style="font-size:var(--text-xs);">R-002<br>R-005</div><div class="risk-cell risk-amber"></div><div class="risk-cell risk-red"></div>
+                  <div></div>
+                  <div class="risk-cell risk-green">2</div><div class="risk-cell risk-green"></div><div class="risk-cell risk-green" style="font-size:var(--text-xs);">R-006</div><div class="risk-cell risk-amber"></div><div class="risk-cell risk-amber" style="font-size:var(--text-xs);">R-004</div>
+                  <div></div>
+                  <div class="risk-cell risk-green">1</div><div class="risk-cell risk-green"></div><div class="risk-cell risk-green"></div><div class="risk-cell risk-green" style="font-size:var(--text-xs);">R-007</div><div class="risk-cell risk-amber"></div>
+                  <div></div>
+                  <div class="risk-label" style="font-weight:600;">1</div><div class="risk-label" style="font-weight:600;">2</div><div class="risk-label" style="font-weight:600;">3</div><div class="risk-label" style="font-weight:600;">4</div><div class="risk-label" style="font-weight:600;">5</div>
+                </div>
+                <div style="text-align:center; margin-top: 8px; font-size: var(--text-xs); color: var(--neutral-500); font-weight: var(--weight-semibold);">Likelihood →</div>
+                <div style="display:flex; gap: 16px; justify-content:center; margin-top: 16px; font-size: var(--text-xs);">
+                  <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--success-light);vertical-align:middle;margin-right:4px;"></span> Low (1–5)</span>
+                  <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--warning-light);vertical-align:middle;margin-right:4px;"></span> Medium (6–11)</span>
+                  <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--danger-light);vertical-align:middle;margin-right:4px;"></span> High (12–25)</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="card" style="margin-bottom: 14px;">
+                <div class="card-title">Risks by Process</div>
+                <div style="font-size: var(--text-sm); color: var(--neutral-600); line-height: 2.2;">
+                  <div>Purchasing — 2 risks</div>
+                  <div>HR & Onboarding — 1 risk</div>
+                  <div>Sales & Quoting — 1 risk</div>
+                  <div>Production — 1 risk</div>
+                  <div>Calibration — 1 risk</div>
+                  <div>Document Control — 1 risk</div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-title">Treatment Distribution</div>
+                <div style="font-size: var(--text-sm); color: var(--neutral-600); line-height: 2.2;">
+                  <div><span class="tag tag-neutral">Mitigate</span> 4 risks</div>
+                  <div><span class="tag tag-neutral">Accept</span> 2 risks</div>
+                  <div><span class="tag tag-neutral">Transfer</span> 1 risk</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-title">Risk Matrix</div>
-            <div class="risk-matrix" style="margin: 0 auto;">
-              <div class="risk-label" style="writing-mode: vertical-lr; transform: rotate(180deg); font-size: 8px;">Impact</div>
-              <div class="risk-cell risk-amber">5</div><div class="risk-cell risk-red"></div><div class="risk-cell risk-red"></div><div class="risk-cell risk-red"></div><div class="risk-cell risk-red"></div>
-              <div></div>
-              <div class="risk-cell risk-green">4</div><div class="risk-cell risk-amber">●</div><div class="risk-cell risk-amber"></div><div class="risk-cell risk-red">●</div><div class="risk-cell risk-red"></div>
-              <div></div>
-              <div class="risk-cell risk-green">3</div><div class="risk-cell risk-green"></div><div class="risk-cell risk-amber">●</div><div class="risk-cell risk-amber"></div><div class="risk-cell risk-red"></div>
-              <div></div>
-              <div class="risk-cell risk-green">2</div><div class="risk-cell risk-green"></div><div class="risk-cell risk-green"></div><div class="risk-cell risk-amber"></div><div class="risk-cell risk-amber"></div>
-              <div></div>
-              <div class="risk-cell risk-green">1</div><div class="risk-cell risk-green"></div><div class="risk-cell risk-green"></div><div class="risk-cell risk-green"></div><div class="risk-cell risk-amber"></div>
-              <div></div>
-              <div class="risk-label">1</div><div class="risk-label">2</div><div class="risk-label">3</div><div class="risk-label">4</div><div class="risk-label">5</div>
+        </div>
+
+        <!-- ──── OPPORTUNITIES TAB ──── -->
+        <div class="risk-sub" id="risks-opportunities">
+          <div class="page-header" style="margin-bottom: 16px;">
+            <div>
+              <div style="font-size: var(--text-lg); font-weight: var(--weight-semibold);">Identified Opportunities</div>
+              <div class="page-subtitle">Improvement opportunities linked to processes (ISO 9001 clause 6.1)</div>
             </div>
-            <div style="text-align:center; margin-top: 4px; font-size: 9px; color: var(--neutral-400);">Likelihood →</div>
+            <button class="btn btn-primary">+ Add Opportunity</button>
           </div>
-          <div class="card">
-            <div class="card-title">Risks by Process</div>
-            <div style="font-size: var(--text-sm); color: var(--neutral-600); line-height: 2.2;">
-              <div>Purchasing — 2 risks</div>
-              <div>Sales & Quoting — 1 risk</div>
-              <div>Production — 1 risk</div>
-            </div>
+          <table class="table">
+            <thead><tr><th>ID</th><th>Opportunity</th><th>Process</th><th>Expected Impact</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">O-001</td><td><strong>Automate supplier evaluation scoring</strong></td><td>Purchasing</td><td>Could reduce evaluation cycle time by 40%</td><td><span class="tag tag-neutral">Identified</span></td></tr>
+              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">O-002</td><td><strong>Implement digital approval workflow</strong></td><td>Purchasing</td><td>Eliminate paper-based delays, reduce approval from 2d to 2h</td><td><span class="tag tag-warning">Under evaluation</span></td></tr>
+              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">O-003</td><td><strong>Centralize training records system</strong></td><td>HR & Onboarding</td><td>Improve audit readiness, reduce evidence gathering by 60%</td><td><span class="tag tag-neutral">Identified</span></td></tr>
+            </tbody>
+          </table>
+          <div class="ai-insight" style="margin-top: 20px;">
+            <div class="ai-icon">✦</div>
+            <div><strong>AI suggestion:</strong> Based on your risk register, implementing automated goods receipt inspection (R-001 mitigation) could also become an opportunity — potentially reducing incoming defect rate by 30%.</div>
           </div>
         </div>
       </div>
@@ -1361,12 +1687,120 @@
         <table class="table">
           <thead><tr><th>Code</th><th>Document</th><th>Process</th><th>Ver.</th><th>Owner</th><th>Status</th><th>Next Review</th></tr></thead>
           <tbody>
-            <tr><td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-001</td><td><strong>Purchasing Procedure</strong></td><td>Purchasing</td><td>v1.2</td><td>J. García</td><td><span class="tag tag-success">Approved</span></td><td>Oct 2026</td></tr>
-            <tr><td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-003</td><td><strong>Supplier Evaluation Policy</strong></td><td>Purchasing</td><td>v0.1</td><td>J. García</td><td><span class="tag tag-warning">Draft</span></td><td>—</td></tr>
-            <tr><td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-001</td><td><strong>Quality Policy</strong></td><td>—</td><td>v1.0</td><td>CEO</td><td><span class="tag tag-success">Approved</span></td><td>Mar 2027</td></tr>
-            <tr><td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-005</td><td><strong>Employee Onboarding Procedure</strong></td><td>HR & Onboarding</td><td>v0.3</td><td>L. Patel</td><td><span class="tag tag-ai">In Review</span></td><td>—</td></tr>
+            <tr style="cursor:pointer;" onclick="navigate('doc-detail-pro001')"><td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-001</td><td><strong>Purchasing Procedure</strong></td><td>Purchasing</td><td>v1.2</td><td>J. García</td><td><span class="tag tag-success">Approved</span></td><td>Oct 2026</td></tr>
+            <tr style="cursor:pointer;"><td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-003</td><td><strong>Supplier Evaluation Policy</strong></td><td>Purchasing</td><td>v0.1</td><td>J. García</td><td><span class="tag tag-warning">Draft</span></td><td>—</td></tr>
+            <tr style="cursor:pointer;"><td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-001</td><td><strong>Quality Policy</strong></td><td>—</td><td>v1.0</td><td>CEO</td><td><span class="tag tag-success">Approved</span></td><td>Mar 2027</td></tr>
+            <tr style="cursor:pointer;"><td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-005</td><td><strong>Employee Onboarding Procedure</strong></td><td>HR & Onboarding</td><td>v0.3</td><td>L. Patel</td><td><span class="tag tag-ai">In Review</span></td><td>—</td></tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- ════════════════ DOCUMENT DETAIL ════════════════ -->
+      <div class="screen" id="screen-doc-detail-pro001">
+        <div class="breadcrumb"><a onclick="navigate('documents')">Documents</a> → <strong>Purchasing Procedure</strong></div>
+
+        <!-- Document Header -->
+        <div class="doc-header">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+            <div style="flex: 1;">
+              <div class="doc-title">Purchasing Procedure</div>
+              <div class="doc-meta-row">
+                <div class="meta-item"><span class="meta-label">Code:</span> PRO-001</div>
+                <div class="meta-item"><span class="meta-label">Process:</span> <a onclick="navigate('process-overview')" style="color: var(--brand-primary); cursor:pointer;">Purchasing</a></div>
+                <div class="meta-item"><span class="meta-label">Owner:</span> J. García</div>
+                <div class="meta-item"><span class="meta-label">Last edited:</span> Apr 12, 2026 by J. García</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px;">
+                <span class="tag tag-success">Approved</span>
+                <select class="version-select">
+                  <option>v1.2 (Current)</option>
+                  <option>v1.1 — Mar 15, 2026</option>
+                  <option>v1.0 — Feb 1, 2026</option>
+                </select>
+              </div>
+            </div>
+            <div class="doc-actions">
+              <button class="btn btn-primary">Edit</button>
+              <button class="btn btn-secondary">Export PDF</button>
+              <button class="btn btn-secondary">Share</button>
+              <button class="btn btn-secondary" style="padding: 8px 10px;">⋯</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Document Body — Confluence-style -->
+        <div class="doc-body">
+          <h1>Purchasing / Procurement Procedure</h1>
+
+          <div class="meta-block">
+            <div><strong>Document Code:</strong> PRO-001</div>
+            <div><strong>Version:</strong> 1.2</div>
+            <div><strong>Effective Date:</strong> April 1, 2026</div>
+            <div><strong>Process Owner:</strong> J. García, Procurement Manager</div>
+          </div>
+
+          <h2>1. Purpose</h2>
+          <p>This procedure defines the steps required to procure goods and services for Acme Manufacturing in a controlled, compliant manner. It ensures that all purchases meet quality requirements, are sourced from evaluated suppliers, and follow appropriate authorization controls as required by ISO 9001:2015.</p>
+
+          <h2>2. Scope</h2>
+          <p>This procedure applies to all procurement activities including purchase requests, supplier selection, purchase order issuance, goods receipt, inspection, and invoice processing. It covers all departments that initiate purchase requests and the Procurement team that processes them.</p>
+
+          <h2>3. Definitions</h2>
+          <table class="doc-table">
+            <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+            <tbody>
+              <tr><td><strong>PO</strong></td><td>Purchase Order — formal document authorizing a supplier to deliver goods/services</td></tr>
+              <tr><td><strong>RFQ</strong></td><td>Request for Quotation — solicitation sent to suppliers to obtain pricing</td></tr>
+              <tr><td><strong>ASL</strong></td><td>Approved Supplier List — register of vetted and approved suppliers</td></tr>
+              <tr><td><strong>GRN</strong></td><td>Goods Receipt Note — document confirming delivery and inspection</td></tr>
+            </tbody>
+          </table>
+
+          <h2>4. Procedure</h2>
+
+          <h3>4.1 Purchase Request</h3>
+          <p>Any employee may initiate a purchase request by completing the Purchase Request Form (TPL-PR-001). The request must include: item description, quantity, estimated cost, required delivery date, and business justification. Requests are submitted to the department manager for initial review.</p>
+
+          <h3>4.2 Approval</h3>
+          <p>The Department Manager reviews and approves all purchase requests. Requests above €500 require formal sign-off documented via the approval form. Requests above €5,000 require additional approval from the Finance Director. This serves as a control point ensuring appropriate authorization before commitment of funds.</p>
+
+          <h3>4.3 Supplier Selection</h3>
+          <p>The Procurement Manager selects suppliers from the Approved Supplier List (ASL). For new suppliers or purchases exceeding €2,000, a formal supplier evaluation must be completed using the Supplier Evaluation Form (TPL-SE-001), assessing quality capability, delivery performance, and pricing competitiveness. Only suppliers meeting minimum scoring criteria (70/100) are added to the ASL.</p>
+
+          <h3>4.4 Purchase Order</h3>
+          <p>The Procurement Manager issues a formal Purchase Order specifying: item details, quantities, agreed pricing, delivery terms, quality requirements, and applicable specifications. The PO references the approved purchase request and selected supplier. A copy is retained in the procurement system.</p>
+
+          <h3>4.5 Goods Receipt & Inspection</h3>
+          <p>Upon delivery, Warehouse personnel verify the shipment against the PO (quantities, item descriptions). QA performs incoming inspection per the Incoming Inspection Checklist (TPL-II-001). Any non-conforming items are segregated, tagged, and reported via the Non-Conformity Report process. Accepted goods are logged via GRN.</p>
+
+          <h3>4.6 Invoice Processing & Payment</h3>
+          <p>Finance matches the supplier invoice against the PO and GRN (three-way match). Discrepancies are resolved with the Procurement Manager before payment authorization. Payment is processed per the standard accounts payable schedule.</p>
+
+          <h2>5. Control Points</h2>
+          <table class="doc-table">
+            <thead><tr><th>Activity</th><th>Control</th><th>Evidence</th><th>ISO 9001 Clause</th></tr></thead>
+            <tbody>
+              <tr><td>Approval</td><td>Manager authorization above €500</td><td>Signed approval form</td><td>8.1</td></tr>
+              <tr><td>Supplier Selection</td><td>Supplier assessment against criteria</td><td>Evaluation form</td><td>8.4.1</td></tr>
+              <tr><td>Supplier Selection</td><td>Approved Supplier List enforcement</td><td>ASL register</td><td>8.4.2</td></tr>
+              <tr><td>Purchase Order</td><td>PO specification completeness</td><td>Issued PO</td><td>8.4.3</td></tr>
+              <tr><td>Goods Receipt</td><td>Incoming inspection against criteria</td><td>Inspection checklist</td><td>8.6</td></tr>
+            </tbody>
+          </table>
+
+          <h2>6. Records</h2>
+          <p>The following records are maintained as evidence of conformity: Purchase Request Forms, Approval Records, Supplier Evaluation Forms, Purchase Orders, Goods Receipt Notes, Incoming Inspection Checklists, and Non-Conformity Reports (where applicable). All records are retained for a minimum of 3 years per the Records Retention Policy (POL-002).</p>
+
+          <h2>7. Revision History</h2>
+          <table class="doc-table">
+            <thead><tr><th>Version</th><th>Date</th><th>Author</th><th>Changes</th></tr></thead>
+            <tbody>
+              <tr><td>1.0</td><td>Feb 1, 2026</td><td>J. García</td><td>Initial release</td></tr>
+              <tr><td>1.1</td><td>Mar 15, 2026</td><td>J. García</td><td>Added €5,000 second approval threshold; updated supplier scoring criteria</td></tr>
+              <tr><td>1.2</td><td>Apr 1, 2026</td><td>J. García</td><td>Added incoming inspection checklist reference; clarified three-way match process</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- ════════════════ ORGANIZATION (placeholder) ════════════════ -->
@@ -1441,7 +1875,9 @@
     'process-overview': 'Process Map',
     'process-activities': 'Process Map',
     'process-risks': 'Process Map',
-    'process-compliance': 'Process Map'
+    'process-compliance': 'Process Map',
+    'process-documents': 'Process Map',
+    'doc-detail-pro001': 'Documents'
   };
 
   function navigate(screenId) {
@@ -1463,6 +1899,24 @@
 
     // Scroll to top
     document.querySelector('.page-content').scrollTop = 0;
+  }
+
+  // ═══════════════════ EXPANDABLE COMPLIANCE ═══════════════════
+  function toggleClause(el) {
+    const section = el.closest('.clause-section');
+    section.classList.toggle('expanded');
+  }
+
+  // ═══════════════════ RISK TAB SWITCHING ═══════════════════
+  function switchRiskTab(tabId) {
+    document.querySelectorAll('.risk-sub').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('risks-' + tabId);
+    if (target) target.classList.add('active');
+    // Update tab active state
+    const tabs = document.querySelectorAll('#riskTabs .tab');
+    tabs.forEach(t => t.classList.remove('active'));
+    const idx = { 'register': 0, 'matrix': 1, 'opportunities': 2 }[tabId];
+    if (tabs[idx]) tabs[idx].classList.add('active');
   }
 
   // ═══════════════════ AI ASSISTANT ═══════════════════
