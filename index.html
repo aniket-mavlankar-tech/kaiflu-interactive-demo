@@ -1539,23 +1539,42 @@
             <div class="card risk-summary-card"><div class="rs-value" style="color: var(--success);">2</div><div class="rs-label">Low</div></div>
           </div>
           <div class="filter-bar">
-            <div class="filter-btn active">All</div>
-            <div class="filter-btn">By Process ▾</div>
-            <div class="filter-btn">By Level ▾</div>
-            <div class="filter-btn">By Treatment ▾</div>
+            <select class="version-select" id="riskFilterProcess" onchange="filterRisks()">
+              <option value="">All Processes</option>
+              <option value="Purchasing">Purchasing</option>
+              <option value="Sales & Quoting">Sales & Quoting</option>
+              <option value="Production">Production</option>
+              <option value="HR & Onboarding">HR & Onboarding</option>
+              <option value="Calibration">Calibration</option>
+              <option value="Document Control">Document Control</option>
+            </select>
+            <select class="version-select" id="riskFilterLevel" onchange="filterRisks()">
+              <option value="">All Levels</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+            <select class="version-select" id="riskFilterTreatment" onchange="filterRisks()">
+              <option value="">All Treatments</option>
+              <option value="Mitigate">Mitigate</option>
+              <option value="Accept">Accept</option>
+              <option value="Transfer">Transfer</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" onclick="clearRiskFilters()" style="margin-left: 4px;">Clear filters</button>
           </div>
-          <table class="table">
+          <table class="table" id="riskTable">
             <thead><tr><th>ID</th><th>Risk</th><th>Process</th><th>Activity</th><th>L</th><th>I</th><th>Score</th><th>Level</th><th>Treatment</th><th>Owner</th><th>Status</th></tr></thead>
             <tbody>
-              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-001</td><td><strong>No supplier evaluation criteria</strong></td><td>Purchasing</td><td>Supplier Selection</td><td>4</td><td>4</td><td><strong>16</strong></td><td><span class="tag tag-danger">High</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>J. García</td><td><span class="tag tag-neutral">Open</span></td></tr>
-              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-002</td><td><strong>Single-person approval, no threshold</strong></td><td>Purchasing</td><td>Approval</td><td>3</td><td>3</td><td><strong>9</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>M. Chen</td><td><span class="tag tag-warning">In progress</span></td></tr>
-              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-003</td><td><strong>Customer data not classified</strong></td><td>Sales & Quoting</td><td>Quote Preparation</td><td>2</td><td>4</td><td><strong>8</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Accept</span></td><td>M. Chen</td><td><span class="tag tag-neutral">Open</span></td></tr>
-              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-004</td><td><strong>No backup for key equipment</strong></td><td>Production</td><td>—</td><td>2</td><td>5</td><td><strong>10</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Transfer</span></td><td>L. Patel</td><td><span class="tag tag-neutral">Open</span></td></tr>
-              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-005</td><td><strong>No training records</strong></td><td>HR & Onboarding</td><td>Onboarding</td><td>3</td><td>3</td><td><strong>9</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>L. Patel</td><td><span class="tag tag-neutral">Open</span></td></tr>
-              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-006</td><td><strong>Outdated calibration records</strong></td><td>Calibration</td><td>Inspection</td><td>2</td><td>2</td><td><strong>4</strong></td><td><span class="tag tag-success">Low</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>J. García</td><td><span class="tag tag-neutral">Open</span></td></tr>
-              <tr><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-007</td><td><strong>Informal document version control</strong></td><td>Document Control</td><td>—</td><td>1</td><td>3</td><td><strong>3</strong></td><td><span class="tag tag-success">Low</span></td><td><span class="tag tag-neutral">Accept</span></td><td>J. García</td><td><span class="tag tag-success">Accepted</span></td></tr>
+              <tr data-process="Purchasing" data-level="High" data-treatment="Mitigate"><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-001</td><td><strong>No supplier evaluation criteria</strong></td><td>Purchasing</td><td>Supplier Selection</td><td>4</td><td>4</td><td><strong>16</strong></td><td><span class="tag tag-danger">High</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>J. García</td><td><span class="tag tag-neutral">Open</span></td></tr>
+              <tr data-process="Purchasing" data-level="Medium" data-treatment="Mitigate"><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-002</td><td><strong>Single-person approval, no threshold</strong></td><td>Purchasing</td><td>Approval</td><td>3</td><td>3</td><td><strong>9</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>M. Chen</td><td><span class="tag tag-warning">In progress</span></td></tr>
+              <tr data-process="Sales & Quoting" data-level="Medium" data-treatment="Accept"><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-003</td><td><strong>Customer data not classified</strong></td><td>Sales & Quoting</td><td>Quote Preparation</td><td>2</td><td>4</td><td><strong>8</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Accept</span></td><td>M. Chen</td><td><span class="tag tag-neutral">Open</span></td></tr>
+              <tr data-process="Production" data-level="Medium" data-treatment="Transfer"><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-004</td><td><strong>No backup for key equipment</strong></td><td>Production</td><td>—</td><td>2</td><td>5</td><td><strong>10</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Transfer</span></td><td>L. Patel</td><td><span class="tag tag-neutral">Open</span></td></tr>
+              <tr data-process="HR & Onboarding" data-level="Medium" data-treatment="Mitigate"><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-005</td><td><strong>No training records</strong></td><td>HR & Onboarding</td><td>Onboarding</td><td>3</td><td>3</td><td><strong>9</strong></td><td><span class="tag tag-warning">Medium</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>L. Patel</td><td><span class="tag tag-neutral">Open</span></td></tr>
+              <tr data-process="Calibration" data-level="Low" data-treatment="Mitigate"><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-006</td><td><strong>Outdated calibration records</strong></td><td>Calibration</td><td>Inspection</td><td>2</td><td>2</td><td><strong>4</strong></td><td><span class="tag tag-success">Low</span></td><td><span class="tag tag-neutral">Mitigate</span></td><td>J. García</td><td><span class="tag tag-neutral">Open</span></td></tr>
+              <tr data-process="Document Control" data-level="Low" data-treatment="Accept"><td style="font-family:var(--font-mono);font-size:var(--text-xs);">R-007</td><td><strong>Informal document version control</strong></td><td>Document Control</td><td>—</td><td>1</td><td>3</td><td><strong>3</strong></td><td><span class="tag tag-success">Low</span></td><td><span class="tag tag-neutral">Accept</span></td><td>J. García</td><td><span class="tag tag-success">Accepted</span></td></tr>
             </tbody>
           </table>
+          <div id="riskNoResults" style="display:none; text-align:center; padding: 32px; color: var(--neutral-400); font-size: var(--text-sm);">No risks match the selected filters.</div>
         </div>
 
         <!-- ──── RISK MATRIX TAB ──── -->
@@ -1643,23 +1662,63 @@
           </div>
           <button class="btn btn-primary">+ Add Task</button>
         </div>
-        <div class="filter-bar">
-          <div class="filter-btn active">All (12)</div>
-          <div class="filter-btn" style="border-color: var(--danger); color: var(--danger);">Overdue (2)</div>
-          <div class="filter-btn">This week (5)</div>
-          <div class="filter-btn">By process ▾</div>
-          <div class="filter-btn">By owner ▾</div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 9px 14px; background: var(--neutral-50); border: 1.5px solid var(--neutral-200); border-radius: var(--radius-md);">
+          <svg width="14" height="14" fill="none" stroke="var(--neutral-400)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="taskSearchInput" oninput="filterTasks()" placeholder="Search tasks by name, owner, process..." style="flex:1; border:none; background:transparent; font-size:var(--text-sm); font-family:var(--font-family); color:var(--neutral-900); outline:none;" />
         </div>
-        <table class="table">
+        <div class="filter-bar" style="flex-wrap: wrap;">
+          <select class="version-select" id="taskFilterStatus" onchange="filterTasks()" style="min-width:130px;">
+            <option value="">All statuses</option>
+            <option value="Overdue">Overdue</option>
+            <option value="In progress">In progress</option>
+            <option value="Open">Open</option>
+            <option value="Done">Done</option>
+          </select>
+          <select class="version-select" id="taskFilterProcess" onchange="filterTasks()" style="min-width:140px;">
+            <option value="">All processes</option>
+            <option value="Purchasing">Purchasing</option>
+            <option value="HR & Onboarding">HR & Onboarding</option>
+            <option value="Sales">Sales</option>
+            <option value="General">General</option>
+          </select>
+          <select class="version-select" id="taskFilterOwner" onchange="filterTasks()" style="min-width:130px;">
+            <option value="">All owners</option>
+            <option value="J. García">J. García</option>
+            <option value="M. Chen">M. Chen</option>
+            <option value="L. Patel">L. Patel</option>
+            <option value="R. Novak">R. Novak</option>
+          </select>
+          <select class="version-select" id="taskFilterType" onchange="filterTasks()" style="min-width:130px;">
+            <option value="">All types</option>
+            <option value="Task">Task</option>
+            <option value="Corrective">Corrective</option>
+          </select>
+          <button class="btn" onclick="clearTaskFilters()" style="font-size: var(--text-xs); padding: 5px 10px;">Clear filters</button>
+        </div>
+        <div class="task-summary" style="display: flex; gap: 12px; margin-bottom: 16px;">
+          <div style="padding: 8px 14px; border-radius: var(--radius-md); background: var(--neutral-50); border: 1px solid var(--neutral-200); font-size: var(--text-sm);">Total: <strong id="taskCountTotal">12</strong></div>
+          <div style="padding: 8px 14px; border-radius: var(--radius-md); background: #fef2f2; border: 1px solid #fecaca; font-size: var(--text-sm); color: var(--danger);">Overdue: <strong id="taskCountOverdue">2</strong></div>
+          <div style="padding: 8px 14px; border-radius: var(--radius-md); background: #fffbeb; border: 1px solid #fde68a; font-size: var(--text-sm); color: var(--warning);">In progress: <strong id="taskCountProgress">3</strong></div>
+          <div style="padding: 8px 14px; border-radius: var(--radius-md); background: #f0fdf4; border: 1px solid #bbf7d0; font-size: var(--text-sm); color: var(--success);">Done: <strong id="taskCountDone">2</strong></div>
+        </div>
+        <table class="table" id="taskTable">
           <thead><tr><th style="width:30px;">☐</th><th>Action</th><th>Type</th><th>Source</th><th>Process</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td>☐</td><td>Define supplier evaluation criteria</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">⚠ Risk</td><td>Purchasing</td><td>J. García</td><td style="color: var(--danger); font-weight: 600;">Apr 8</td><td><span class="tag tag-danger">Overdue</span></td></tr>
-            <tr><td>☐</td><td>Create purchase approval matrix</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">⚠ Risk</td><td>Purchasing</td><td>M. Chen</td><td>Apr 18</td><td><span class="tag tag-warning">In progress</span></td></tr>
-            <tr><td>☐</td><td>Document goods inspection procedure</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">◫ Compliance</td><td>Purchasing</td><td>J. García</td><td>Apr 22</td><td><span class="tag tag-neutral">Open</span></td></tr>
-            <tr><td>☐</td><td>Set up training record template</td><td><span class="tag tag-neutral">Corrective</span></td><td style="font-size: var(--text-xs);">✕ NC</td><td>HR & Onboarding</td><td>L. Patel</td><td>Apr 25</td><td><span class="tag tag-neutral">Open</span></td></tr>
-            <tr style="opacity: 0.5;"><td>☑</td><td style="text-decoration: line-through;">Draft purchasing process description</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">✎ Manual</td><td>Purchasing</td><td>J. García</td><td>Apr 1</td><td><span class="tag tag-success">Done</span></td></tr>
+            <tr data-process="Purchasing" data-status="Overdue" data-owner="J. García" data-type="Task" data-search="Define supplier evaluation criteria Task Risk Purchasing J. García Overdue"><td>☐</td><td>Define supplier evaluation criteria</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">⚠ Risk</td><td>Purchasing</td><td>J. García</td><td style="color: var(--danger); font-weight: 600;">Apr 8</td><td><span class="tag tag-danger">Overdue</span></td></tr>
+            <tr data-process="Purchasing" data-status="In progress" data-owner="M. Chen" data-type="Task" data-search="Create purchase approval matrix Task Risk Purchasing M. Chen In progress"><td>☐</td><td>Create purchase approval matrix</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">⚠ Risk</td><td>Purchasing</td><td>M. Chen</td><td>Apr 18</td><td><span class="tag tag-warning">In progress</span></td></tr>
+            <tr data-process="Purchasing" data-status="Open" data-owner="J. García" data-type="Task" data-search="Document goods inspection procedure Task Compliance Purchasing J. García Open"><td>☐</td><td>Document goods inspection procedure</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">◫ Compliance</td><td>Purchasing</td><td>J. García</td><td>Apr 22</td><td><span class="tag tag-neutral">Open</span></td></tr>
+            <tr data-process="HR & Onboarding" data-status="Open" data-owner="L. Patel" data-type="Corrective" data-search="Set up training record template Corrective NC HR Onboarding L. Patel Open"><td>☐</td><td>Set up training record template</td><td><span class="tag tag-neutral">Corrective</span></td><td style="font-size: var(--text-xs);">✕ NC</td><td>HR & Onboarding</td><td>L. Patel</td><td>Apr 25</td><td><span class="tag tag-neutral">Open</span></td></tr>
+            <tr data-process="Purchasing" data-status="Overdue" data-owner="M. Chen" data-type="Task" data-search="Update supplier approved list Task Manual Purchasing M. Chen Overdue"><td>☐</td><td>Update supplier approved list</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">✎ Manual</td><td>Purchasing</td><td>M. Chen</td><td style="color: var(--danger); font-weight: 600;">Apr 10</td><td><span class="tag tag-danger">Overdue</span></td></tr>
+            <tr data-process="Purchasing" data-status="In progress" data-owner="J. García" data-type="Task" data-search="Schedule supplier audit Q2 Task Risk Purchasing J. García In progress"><td>☐</td><td>Schedule supplier audit Q2</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">⚠ Risk</td><td>Purchasing</td><td>J. García</td><td>Apr 28</td><td><span class="tag tag-warning">In progress</span></td></tr>
+            <tr data-process="General" data-status="In progress" data-owner="R. Novak" data-type="Task" data-search="Prepare management review agenda Task Manual General R. Novak In progress"><td>☐</td><td>Prepare management review agenda</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">✎ Manual</td><td>General</td><td>R. Novak</td><td>Apr 20</td><td><span class="tag tag-warning">In progress</span></td></tr>
+            <tr data-process="Sales" data-status="Open" data-owner="R. Novak" data-type="Task" data-search="Define customer feedback mechanism Task Compliance Sales R. Novak Open"><td>☐</td><td>Define customer feedback mechanism</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">◫ Compliance</td><td>Sales</td><td>R. Novak</td><td>May 2</td><td><span class="tag tag-neutral">Open</span></td></tr>
+            <tr data-process="HR & Onboarding" data-status="Open" data-owner="L. Patel" data-type="Task" data-search="Create competency matrix template Task Compliance HR Onboarding L. Patel Open"><td>☐</td><td>Create competency matrix template</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">◫ Compliance</td><td>HR & Onboarding</td><td>L. Patel</td><td>May 5</td><td><span class="tag tag-neutral">Open</span></td></tr>
+            <tr data-process="Purchasing" data-status="Open" data-owner="J. García" data-type="Corrective" data-search="Root cause analysis delayed shipment Corrective NC Purchasing J. García Open"><td>☐</td><td>Root cause analysis — delayed shipment</td><td><span class="tag tag-neutral">Corrective</span></td><td style="font-size: var(--text-xs);">✕ NC</td><td>Purchasing</td><td>J. García</td><td>Apr 30</td><td><span class="tag tag-neutral">Open</span></td></tr>
+            <tr data-process="Purchasing" data-status="Done" data-owner="J. García" data-type="Task" data-search="Draft purchasing process description Task Manual Purchasing J. García Done" style="opacity: 0.5;"><td>☑</td><td style="text-decoration: line-through;">Draft purchasing process description</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">✎ Manual</td><td>Purchasing</td><td>J. García</td><td>Apr 1</td><td><span class="tag tag-success">Done</span></td></tr>
+            <tr data-process="General" data-status="Done" data-owner="R. Novak" data-type="Task" data-search="Publish quality policy v2 Task Manual General R. Novak Done" style="opacity: 0.5;"><td>☑</td><td style="text-decoration: line-through;">Publish quality policy v2</td><td><span class="tag tag-neutral">Task</span></td><td style="font-size: var(--text-xs);">✎ Manual</td><td>General</td><td>R. Novak</td><td>Mar 28</td><td><span class="tag tag-success">Done</span></td></tr>
           </tbody>
         </table>
+        <div id="taskNoResults" style="display:none; text-align:center; padding:32px; color:var(--neutral-400); font-size:var(--text-sm);">No tasks match the current filters.</div>
       </div>
 
       <!-- ════════════════ DOCUMENTS ════════════════ -->
@@ -1673,26 +1732,54 @@
         </div>
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 9px 14px; background: var(--neutral-50); border: 1.5px solid var(--neutral-200); border-radius: var(--radius-md);">
           <svg width="14" height="14" fill="none" stroke="var(--neutral-400)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <span style="color: var(--neutral-400); font-size: var(--text-sm);">Search documents by name, code, process...</span>
+          <input type="text" id="docSearchInput" oninput="filterDocs()" placeholder="Search documents by name, code, process..." style="flex:1; border:none; background:transparent; font-size:var(--text-sm); font-family:var(--font-family); color:var(--neutral-900); outline:none;" />
         </div>
-        <div class="tabs">
-          <div class="tab active">Procedures & Policies</div>
-          <div class="tab">Templates</div>
-          <div class="tab">Evidence & Records</div>
+        <div class="tabs" id="docTabs">
+          <div class="tab active" onclick="switchDocTab('procedures')">Procedures & Policies</div>
+          <div class="tab" onclick="switchDocTab('templates')">Templates</div>
+          <div class="tab" onclick="switchDocTab('evidence')">Evidence & Records</div>
         </div>
         <div class="filter-bar">
-          <div class="filter-btn">All processes ▾</div>
-          <div class="filter-btn">Status ▾</div>
+          <select class="version-select" id="docFilterProcess" onchange="filterDocs()">
+            <option value="">All processes</option>
+            <option value="Purchasing">Purchasing</option>
+            <option value="HR & Onboarding">HR & Onboarding</option>
+            <option value="General">General</option>
+          </select>
+          <select class="version-select" id="docFilterStatus" onchange="filterDocs()">
+            <option value="">All statuses</option>
+            <option value="Approved">Approved</option>
+            <option value="Draft">Draft</option>
+            <option value="In Review">In Review</option>
+          </select>
+          <button class="btn btn-ghost btn-sm" onclick="clearDocFilters()" style="margin-left: 4px;">Clear filters</button>
         </div>
-        <table class="table">
+        <table class="table" id="docTable">
           <thead><tr><th>Code</th><th>Document</th><th>Process</th><th>Ver.</th><th>Owner</th><th>Status</th><th>Next Review</th></tr></thead>
           <tbody>
-            <tr style="cursor:pointer;" onclick="navigate('doc-detail-pro001')"><td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-001</td><td><strong>Purchasing Procedure</strong></td><td>Purchasing</td><td>v1.2</td><td>J. García</td><td><span class="tag tag-success">Approved</span></td><td>Oct 2026</td></tr>
-            <tr style="cursor:pointer;"><td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-003</td><td><strong>Supplier Evaluation Policy</strong></td><td>Purchasing</td><td>v0.1</td><td>J. García</td><td><span class="tag tag-warning">Draft</span></td><td>—</td></tr>
-            <tr style="cursor:pointer;"><td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-001</td><td><strong>Quality Policy</strong></td><td>—</td><td>v1.0</td><td>CEO</td><td><span class="tag tag-success">Approved</span></td><td>Mar 2027</td></tr>
-            <tr style="cursor:pointer;"><td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-005</td><td><strong>Employee Onboarding Procedure</strong></td><td>HR & Onboarding</td><td>v0.3</td><td>L. Patel</td><td><span class="tag tag-ai">In Review</span></td><td>—</td></tr>
+            <tr style="cursor:pointer;" onclick="navigate('doc-detail-pro001')" data-process="Purchasing" data-status="Approved" data-type="procedures" data-search="PRO-001 Purchasing Procedure Purchasing J. García">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-001</td><td><strong>Purchasing Procedure</strong></td><td>Purchasing</td><td>v1.2</td><td>J. García</td><td><span class="tag tag-success">Approved</span></td><td>Oct 2026</td></tr>
+            <tr style="cursor:pointer;" data-process="Purchasing" data-status="Draft" data-type="procedures" data-search="POL-003 Supplier Evaluation Policy Purchasing J. García">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-003</td><td><strong>Supplier Evaluation Policy</strong></td><td>Purchasing</td><td>v0.1</td><td>J. García</td><td><span class="tag tag-warning">Draft</span></td><td>—</td></tr>
+            <tr style="cursor:pointer;" data-process="General" data-status="Approved" data-type="procedures" data-search="POL-001 Quality Policy General CEO">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">POL-001</td><td><strong>Quality Policy</strong></td><td>—</td><td>v1.0</td><td>CEO</td><td><span class="tag tag-success">Approved</span></td><td>Mar 2027</td></tr>
+            <tr style="cursor:pointer;" data-process="HR & Onboarding" data-status="In Review" data-type="procedures" data-search="PRO-005 Employee Onboarding Procedure HR Onboarding L. Patel">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">PRO-005</td><td><strong>Employee Onboarding Procedure</strong></td><td>HR & Onboarding</td><td>v0.3</td><td>L. Patel</td><td><span class="tag tag-ai">In Review</span></td><td>—</td></tr>
+            <tr style="cursor:pointer;" data-process="Purchasing" data-status="Approved" data-type="templates" data-search="TPL-PR-001 Purchase Request Form Purchasing J. García">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">TPL-PR-001</td><td><strong>Purchase Request Form</strong></td><td>Purchasing</td><td>v1.0</td><td>J. García</td><td><span class="tag tag-success">Approved</span></td><td>—</td></tr>
+            <tr style="cursor:pointer;" data-process="Purchasing" data-status="Approved" data-type="templates" data-search="TPL-SE-001 Supplier Evaluation Form Purchasing J. García">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">TPL-SE-001</td><td><strong>Supplier Evaluation Form</strong></td><td>Purchasing</td><td>v1.1</td><td>J. García</td><td><span class="tag tag-success">Approved</span></td><td>—</td></tr>
+            <tr style="cursor:pointer;" data-process="Purchasing" data-status="Draft" data-type="templates" data-search="TPL-II-001 Incoming Inspection Checklist Purchasing J. García">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">TPL-II-001</td><td><strong>Incoming Inspection Checklist</strong></td><td>Purchasing</td><td>v0.2</td><td>J. García</td><td><span class="tag tag-warning">Draft</span></td><td>—</td></tr>
+            <tr style="cursor:pointer;" data-process="Purchasing" data-status="Approved" data-type="evidence" data-search="REC-PO-2026-042 PO-2026-042 Supplier A Purchasing J. García">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">REC-PO-2026-042</td><td><strong>PO-2026-042 — Supplier A</strong></td><td>Purchasing</td><td>—</td><td>J. García</td><td><span class="tag tag-success">Approved</span></td><td>—</td></tr>
+            <tr style="cursor:pointer;" data-process="Purchasing" data-status="Approved" data-type="evidence" data-search="REC-GRN-2026-038 GRN Goods Receipt Supplier A Purchasing Warehouse">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">REC-GRN-2026-038</td><td><strong>GRN-2026-038 — Goods Receipt</strong></td><td>Purchasing</td><td>—</td><td>Warehouse</td><td><span class="tag tag-success">Approved</span></td><td>—</td></tr>
+            <tr style="cursor:pointer;" data-process="HR & Onboarding" data-status="Draft" data-type="evidence" data-search="REC-TR-001 Training Record L. Patel HR Onboarding">
+              <td style="font-family: var(--font-mono); font-size: var(--text-xs);">REC-TR-001</td><td><strong>Training Record — L. Patel</strong></td><td>HR & Onboarding</td><td>—</td><td>L. Patel</td><td><span class="tag tag-warning">Draft</span></td><td>—</td></tr>
           </tbody>
         </table>
+        <div id="docNoResults" style="display:none; text-align:center; padding: 32px; color: var(--neutral-400); font-size: var(--text-sm);">No documents match the selected filters.</div>
       </div>
 
       <!-- ════════════════ DOCUMENT DETAIL ════════════════ -->
@@ -1907,6 +1994,51 @@
     section.classList.toggle('expanded');
   }
 
+  // ═══════════════════ RISK FILTERING ═══════════════════
+  function filterRisks() {
+    const process = document.getElementById('riskFilterProcess').value;
+    const level = document.getElementById('riskFilterLevel').value;
+    const treatment = document.getElementById('riskFilterTreatment').value;
+    const rows = document.querySelectorAll('#riskTable tbody tr');
+    let visible = 0;
+
+    rows.forEach(row => {
+      const matchProcess = !process || row.dataset.process === process;
+      const matchLevel = !level || row.dataset.level === level;
+      const matchTreatment = !treatment || row.dataset.treatment === treatment;
+      const show = matchProcess && matchLevel && matchTreatment;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    document.getElementById('riskNoResults').style.display = visible === 0 ? 'block' : 'none';
+
+    // Update summary cards
+    const cards = document.querySelectorAll('.risk-summary-card .rs-value');
+    if (cards.length >= 4) {
+      let total = 0, high = 0, med = 0, low = 0;
+      rows.forEach(row => {
+        if (row.style.display !== 'none') {
+          total++;
+          if (row.dataset.level === 'High') high++;
+          else if (row.dataset.level === 'Medium') med++;
+          else if (row.dataset.level === 'Low') low++;
+        }
+      });
+      cards[0].textContent = total;
+      cards[1].textContent = high;
+      cards[2].textContent = med;
+      cards[3].textContent = low;
+    }
+  }
+
+  function clearRiskFilters() {
+    document.getElementById('riskFilterProcess').value = '';
+    document.getElementById('riskFilterLevel').value = '';
+    document.getElementById('riskFilterTreatment').value = '';
+    filterRisks();
+  }
+
   // ═══════════════════ RISK TAB SWITCHING ═══════════════════
   function switchRiskTab(tabId) {
     document.querySelectorAll('.risk-sub').forEach(s => s.classList.remove('active'));
@@ -1917,6 +2049,89 @@
     tabs.forEach(t => t.classList.remove('active'));
     const idx = { 'register': 0, 'matrix': 1, 'opportunities': 2 }[tabId];
     if (tabs[idx]) tabs[idx].classList.add('active');
+  }
+
+  // ═══════════════════ DOCUMENT FILTERING ═══════════════════
+  let activeDocTab = 'procedures';
+
+  function filterDocs() {
+    const process = document.getElementById('docFilterProcess').value;
+    const status = document.getElementById('docFilterStatus').value;
+    const search = document.getElementById('docSearchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('#docTable tbody tr');
+    let visible = 0;
+
+    rows.forEach(row => {
+      const matchProcess = !process || row.dataset.process === process;
+      const matchStatus = !status || row.dataset.status === status;
+      const matchType = row.dataset.type === activeDocTab;
+      const matchSearch = !search || (row.dataset.search && row.dataset.search.toLowerCase().includes(search));
+      const show = matchProcess && matchStatus && matchType && matchSearch;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    document.getElementById('docNoResults').style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  function clearDocFilters() {
+    document.getElementById('docFilterProcess').value = '';
+    document.getElementById('docFilterStatus').value = '';
+    document.getElementById('docSearchInput').value = '';
+    activeDocTab = 'procedures';
+    const tabs = document.querySelectorAll('#docTabs .tab');
+    tabs.forEach((t, i) => t.classList.toggle('active', i === 0));
+    filterDocs();
+  }
+
+  function switchDocTab(tabId) {
+    activeDocTab = tabId;
+    const tabMap = { 'procedures': 0, 'templates': 1, 'evidence': 2 };
+    const tabs = document.querySelectorAll('#docTabs .tab');
+    tabs.forEach((t, i) => t.classList.toggle('active', i === tabMap[tabId]));
+    filterDocs();
+  }
+
+  // ═══════════════════ TASK FILTERING ═══════════════════
+  function filterTasks() {
+    const status = document.getElementById('taskFilterStatus').value;
+    const process = document.getElementById('taskFilterProcess').value;
+    const owner = document.getElementById('taskFilterOwner').value;
+    const type = document.getElementById('taskFilterType').value;
+    const search = document.getElementById('taskSearchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('#taskTable tbody tr');
+    let visible = 0, overdue = 0, progress = 0, done = 0;
+
+    rows.forEach(row => {
+      const matchStatus = !status || row.dataset.status === status;
+      const matchProcess = !process || row.dataset.process === process;
+      const matchOwner = !owner || row.dataset.owner === owner;
+      const matchType = !type || row.dataset.type === type;
+      const matchSearch = !search || (row.dataset.search && row.dataset.search.toLowerCase().includes(search));
+      const show = matchStatus && matchProcess && matchOwner && matchType && matchSearch;
+      row.style.display = show ? '' : 'none';
+      if (show) {
+        visible++;
+        if (row.dataset.status === 'Overdue') overdue++;
+        else if (row.dataset.status === 'In progress') progress++;
+        else if (row.dataset.status === 'Done') done++;
+      }
+    });
+
+    document.getElementById('taskNoResults').style.display = visible === 0 ? 'block' : 'none';
+    document.getElementById('taskCountTotal').textContent = visible;
+    document.getElementById('taskCountOverdue').textContent = overdue;
+    document.getElementById('taskCountProgress').textContent = progress;
+    document.getElementById('taskCountDone').textContent = done;
+  }
+
+  function clearTaskFilters() {
+    document.getElementById('taskFilterStatus').value = '';
+    document.getElementById('taskFilterProcess').value = '';
+    document.getElementById('taskFilterOwner').value = '';
+    document.getElementById('taskFilterType').value = '';
+    document.getElementById('taskSearchInput').value = '';
+    filterTasks();
   }
 
   // ═══════════════════ AI ASSISTANT ═══════════════════
@@ -1958,6 +2173,10 @@
     }, 500);
     body.scrollTop = body.scrollHeight;
   }
+
+  // ═══════════════════ INIT ═══════════════════
+  // Apply default doc tab filter on load
+  filterDocs();
 </script>
 
 </body>
